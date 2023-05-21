@@ -26,7 +26,9 @@ public:
         while (true) {
             bool found;
             int value;
-            std::tie(found, value) = Search(path, 0, bound);
+            std::pair<bool, int> p = Search(path, 0, bound);
+            found = p.first;
+            value = p.second;
             if (found) {
                 std::string res;
                 for (size_t state_index = 1; state_index < path.size(); ++state_index) {
@@ -51,15 +53,15 @@ public:
     }
 
 private:
-    std::tuple<bool, int> Search(std::vector<State>& path, int current_cost, int bound) {
+    std::pair<bool, int> Search(std::vector<State>& path, int current_cost, int bound) {
         State node = path.back();
         int new_cost = current_cost + node.distance(puzzle_.goals);
         if (new_cost > bound) {
-            return std::make_tuple(false, new_cost);
+            return std::make_pair(false, new_cost);
         }
         if (node.success(puzzle_.goals)) {
 
-            return std::make_tuple(true, bound);
+            return std::make_pair(true, bound);
         }
         int minimum = INT_MAX;
         std::vector<Move*> moves { new Up(puzzle_.walls), new Down(puzzle_.walls), new Right(puzzle_.walls), new Left(puzzle_.walls) };
@@ -77,17 +79,19 @@ private:
                 bool found;
                 int value;
                 search_calls_++;
-                std::tie(found, value) = Search(path, current_cost + 1, bound);
+                std::pair<bool, int> p = Search(path, current_cost + 1, bound);
+                found = p.first;
+                value = p.second;
                 if (found) {
-                    return std::make_tuple(true, bound);
+                    return std::make_pair(true, bound);
                 }
-                if (value != -1 && (minimum == -1 || value < minimum)) {
+                if (value != -1 && value < minimum) {
                     minimum = value;
                 }
                 path.pop_back();
             }
         }
-        return std::make_tuple(false, minimum);
+        return std::make_pair(false, minimum);
     }
 
 //    void PrintSolution(const std::vector<State>& path) {
@@ -108,22 +112,22 @@ private:
     int search_calls_ = 0;
 };
 
-int main() {
-    Puzzle puzzle;
-    puzzle.walls = {
-            {0, 1, 0, 1, 0, 0},
-            {0, 1, 0, 1, 1, 1},
-            {1, 1, 0, 0, 0, 0},
-            {0, 0, 0, 0, 1, 1},
-            {1, 1, 1, 0, 1, 0},
-            {0, 0, 1, 0, 1, 0}
-    };
-    puzzle.player = {3, 3};
-    puzzle.boxes = {{2, 2}, {2, 4}, {3, 2}, {4, 3}};
-    puzzle.goals = {{0, 2}, {2, 5}, {3, 0}, {5, 3}};
-
-    Solver solver(puzzle);
-    std::cout << solver.Solve();
-
-    return 0;
-}
+//int main() {
+//    Puzzle puzzle;
+//    puzzle.walls = {
+//            {0, 1, 0, 1, 0, 0},
+//            {0, 1, 0, 1, 1, 1},
+//            {1, 1, 0, 0, 0, 0},
+//            {0, 0, 0, 0, 1, 1},
+//            {1, 1, 1, 0, 1, 0},
+//            {0, 0, 1, 0, 1, 0}
+//    };
+//    puzzle.player = {3, 3};
+//    puzzle.boxes = {{2, 2}, {2, 4}, {3, 2}, {4, 3}};
+//    puzzle.goals = {{0, 2}, {2, 5}, {3, 0}, {5, 3}};
+//
+//    Solver solver(puzzle);
+//    std::cout << solver.Solve();
+//
+//    return 0;
+//}
