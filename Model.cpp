@@ -9,7 +9,7 @@
 std::vector<std::vector<char>> Model::level_from_file() {
     std::vector<std::vector<char>> res;
     std::string line;
-    std::ifstream in("C:\\Users\\Nikita\\Desktop\\sokoban\\sokoban_game\\levels\\level");
+    std::ifstream in("C:\\Users\\admin\\Desktop\\sokoban\\sokoban_game\\levels\\level");
     while (std::getline(in, line)) {
         std::vector<char> tmp;
         for (char & i : line) {

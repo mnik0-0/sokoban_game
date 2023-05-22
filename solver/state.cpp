@@ -7,10 +7,7 @@
 #include "string"
 #include "iostream"
 #include "algorithm"
-
-bool operator==(const Position& a, const Position& b) {
-    return (a.col == b.col) && (a.row == b.row);
-}
+#include "position.h"
 
 State::State(Position player, const std::vector<Position> &boxes) : player(player), boxes(boxes) {}
 
@@ -38,30 +35,11 @@ bool State::success(const std::vector<Position>& goals) {
     return true;
 }
 
-int State::manh_distance(const Position &box, const Position &goal) {
-    return abs(box.row - goal.row) + abs(box.col - goal.col);
-}
-
-int State::distance(const std::vector<Position> &goals) {
-    int totalDistance = 0;
-
-
-    for (const auto& boxCoord : boxes) {
-        int minDistance = INT_MAX;
-
-        for (const auto& targetCoord : goals) {
-
-            int distance = manh_distance(boxCoord, targetCoord);
-
-            if (distance < minDistance) {
-                minDistance = distance;
-            }
-        }
-
-        totalDistance += minDistance;
+bool State::operator<(const State &rhs) const {
+    if (player == rhs.player) {
+        return boxes < rhs.boxes;
     }
-
-    return totalDistance;
+    return player < rhs.player;
 }
 
 bool operator==(const State& a, const State& b) {

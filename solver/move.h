@@ -2,15 +2,13 @@
 // Created by admin on 21.05.2023.
 //
 #pragma once
-#ifndef GAME_SOKOBAN_MOVE_H
-#define GAME_SOKOBAN_MOVE_H
 
 #include "vector"
 #include "state.h"
 
 class Move {
 public:
-    Move(const std::vector<std::vector<int>> &walls);
+    Move(const std::vector<std::vector<bool>> &walls);
 
     State *get_state(const State &state);
 
@@ -28,12 +26,12 @@ public:
 
 
 public:
-    std::vector<std::vector<int>> walls;
+    std::vector<std::vector<bool>> walls;
 };
 
 class Up : public Move {
 public:
-    Up(const std::vector<std::vector<int>>& walls) : Move(walls) {}
+    Up(const std::vector<std::vector<bool>>& walls) : Move(walls) {}
 
     bool can_move_in_direction(const State& state) const override {
         return state.player.row > 0;
@@ -62,7 +60,7 @@ public:
 
 class Down : public Move {
 public:
-    Down(const std::vector<std::vector<int>>& walls) : Move(walls) {}
+    Down(const std::vector<std::vector<bool>>& walls) : Move(walls) {}
 
     bool can_move_in_direction(const State& state) const override {
         return state.player.row < walls.size() - 1;
@@ -91,7 +89,7 @@ public:
 
 class Left : public Move {
 public:
-    Left(const std::vector<std::vector<int>>& walls) : Move(walls) {}
+    Left(const std::vector<std::vector<bool>>& walls) : Move(walls) {}
 
     bool can_move_in_direction(const State& state) const override {
         return state.player.col > 0;
@@ -120,7 +118,7 @@ public:
 
 class Right : public Move {
 public:
-    Right(const std::vector<std::vector<int>>& walls) : Move(walls) {}
+    Right(const std::vector<std::vector<bool>>& walls) : Move(walls) {}
 
     bool can_move_in_direction(const State& state) const override {
         return state.player.col < walls[0].size() - 1;
@@ -147,4 +145,3 @@ public:
     }
 };
 
-#endif //GAME_SOKOBAN_MOVE_H

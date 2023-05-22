@@ -1,144 +1,206 @@
 #pragma once
 
-#include <iostream>
-#include <vector>
-#include <algorithm>
 #include "state.h"
-#include "move.h"
-
-
-class Puzzle {
-public:
-    std::vector<std::vector<int>> walls;
-    Position player;
-    std::vector<Position> boxes;
-    std::vector<Position> goals;
-
-};
-
+#include "position.h"
+#include "puzzle.h"
+#include <map>
+#include <queue>
 class Solver {
 public:
-    Solver(const Puzzle& puzzle) : puzzle_(puzzle) {}
+    enum class Path {
+        right,
+        left,
+        down,
+        up,
+        none
+    };
 
-    std::string Solve() {
-        State initial_state(puzzle_.player, puzzle_.boxes);
-        int bound = initial_state.distance(puzzle_.goals) * 2;
-        std::vector<State> path {initial_state};
+    std::map<State, bool> answer; // true, если из состояния State можно получить выигрышную позицию
+    std::vector<Position> goals; // база
+    std::vector<std::vector<bool>> wall; // база
 
-        while (true) {
-            bool found;
-            int value;
-            std::pair<bool, int> p = Search(path, 0, bound);
-            found = p.first;
-            value = p.second;
-            if (found) {
-                std::string res;
-                for (size_t state_index = 1; state_index < path.size(); ++state_index) {
-                    if (path[state_index - 1].player.row < path[state_index].player.row) {
-                        res += "Down ";
-                    } else if (path[state_index - 1].player.row > path[state_index].player.row) {
-                        res += "Up ";
-                    } else if (path[state_index - 1].player.col < path[state_index].player.col) {
-                        res += "Right ";
-                    } else {
-                        res += "Left ";
+
+    std::map<State, Path> next; // куда нужно из State перейти, чтобы приблизится к выигрышной позиции
+    std::map<State, State> nextState;
+
+
+    bool checkWall(int i, int j) {
+        if (i < 0 || j < 0 || i >= wall.size() || j >= wall[i].size()) {
+            return true;
+        }
+        return wall[i][j];
+    }
+
+
+    void getAns() {
+        // добавляем в очередь все выигрышные State
+        std::vector<int> per; // вспомогательынй массив
+        for (int i = 0; i < goals.size(); ++i) {
+            per.push_back(i);
+        }
+
+        std::queue<State> q;
+        // перебираем все перестановки
+        do {
+            State vertex{{0, 0},
+                         {{0, 0}}};
+            // расставляем ящики по клеткам goals
+            vertex.boxes.resize(goals.size(), {0, 0});
+            for (int i = 0; i < goals.size(); ++i) {
+                vertex.boxes[per[i]] = goals[i];
+            }
+            // расставляем главного героя
+            for (int i = 0; i < wall.size(); ++i) {
+                for (int j = 0; j < wall[i].size(); ++j) {
+                    if (checkWall(i, j) || std::find(goals.begin(), goals.end(), Position(i, j)) != goals.end()) {
+                        continue;
+                    }
+                    vertex.player = {i, j};
+                    answer[vertex] = true;
+                    next[vertex] = Path::none;
+                    q.push(vertex);
+                }
+            }
+        } while (std::next_permutation(per.begin(), per.end()));
+        // пока есть состояния, из которых можно получить новые
+        while (!q.empty()) {
+            const State vertex = q.front();
+            q.pop();
+//        std::cout <<
+//                  vertex.hero.row << " " << vertex.hero.col << " " << vertex.boxes[0].row << " "
+//                  << vertex.boxes[0].col << std::endl;
+            // начинаем перебор всех State, из которых можно попасть в состояние vertex
+            for (int sg1: {-1, 1}) {
+                for (int sg2: {0}) {
+                    const Position pos{vertex.player.row + sg1, vertex.player.col + sg2};
+                    State st{pos, std::vector<Position>(vertex.boxes)};
+                    if (checkWall(vertex.player.row + sg1, vertex.player.col + sg2) ||
+                        std::find(vertex.boxes.begin(), vertex.boxes.end(), pos) != vertex.boxes.end()) {
+                        continue;
+                    }
+                    // если не было еще такого состояния
+//                std::cout << st.hero.row << " " << st.hero.col << " " << st.boxes[0].row << " " << st.boxes[0].col
+//                          << "  in   " <<
+//                          vertex.hero.row << " " << vertex.hero.col << " " << vertex.boxes[0].row << " "
+//                          << vertex.boxes[0].col << " " << answer[st] << std::endl;
+                    if (!answer[st]) {
+//                    std::cout << st.hero.row << " " << st.hero.col << " " << st.boxes[0].row << " " << st.boxes[0].col
+//                              << "  in   " <<
+//                              vertex.hero.row << " " << vertex.hero.col << " " << vertex.boxes[0].row << " "
+//                              << vertex.boxes[0].col << std::endl;
+                        q.push(st);
+                        answer[st] = true;
+                        nextState.insert({st, vertex});
+                        // запоминаем, куда нужно идти из состояния State
+                        if (sg1 == -1) {
+                            next[st] = Path::down;
+                        } else {
+                            next[st] = Path::up;
+                        }
+                    }
+                    // пробуем сделать движение ящика назад (например #iz <- iz#)
+                    Position pos2{vertex.player.row - sg1, vertex.player.col - sg2};
+                    const auto it = std::find(st.boxes.begin(), st.boxes.end(), pos2);
+                    if (it == st.boxes.end()) {
+                        continue;
+                    }
+                    st.boxes[it - st.boxes.begin()] = vertex.player;
+                    if (!answer[st]) {
+//                    std::cout << st.hero.row << " " << st.hero.col << " " << st.boxes[0].row << " " << st.boxes[0].col
+//                              << "  in   " <<
+//                              vertex.hero.row << " " << vertex.hero.col << " " << vertex.boxes[0].row << " "
+//                              << vertex.boxes[0].col << std::endl;
+                        q.push(st);
+                        answer[st] = true;
+                        nextState.insert({st, vertex});
+                        if (sg1 == -1) {
+                            next[st] = Path::down;
+                        } else {
+                            next[st] = Path::up;
+                        }
                     }
                 }
-                return res;
             }
-            if (value == INT_MAX) {
 
-                return "Not found";
+
+            for (int sg1: {0}) {
+                for (int sg2: {-1, 1}) {
+                    Position pos{vertex.player.row + sg1, vertex.player.col + sg2};
+                    State st{pos, vertex.boxes};
+                    if (checkWall(vertex.player.row + sg1, vertex.player.col + sg2) ||
+                        std::find(vertex.boxes.begin(), vertex.boxes.end(), pos) != vertex.boxes.end()) {
+                        continue;
+                    }
+                    // если не было еще такого состояния
+                    if (!answer[st]) {
+//                    std::cout << st.hero.row << " " << st.hero.col << " " << st.boxes[0].row << " " << st.boxes[0].col
+//                              << "  in   " <<
+//                              vertex.hero.row << " " << vertex.hero.col << " " << vertex.boxes[0].row << " "
+//                              << vertex.boxes[0].col << std::endl;
+                        q.push(st);
+                        answer[st] = true;
+                        nextState.insert({st, vertex});
+                        // запоминаем, куда нужно идти из состояния State
+                        if (sg2 == -1) {
+                            next[st] = Path::right;
+                        } else {
+                            next[st] = Path::left;
+                        }
+                    }
+                    // пробуем сделать движение ящика назад (например #iz <- iz#)
+                    Position pos2{vertex.player.row - sg1, vertex.player.col - sg2};
+                    const auto it = std::find(st.boxes.begin(), st.boxes.end(), pos2);
+                    if (it == st.boxes.end()) {
+                        continue;
+                    }
+                    st.boxes[it - st.boxes.begin()] = vertex.player;
+                    if (!answer[st]) {
+//                    std::cout << st.hero.row << " " << st.hero.col << " " << st.boxes[0].row << " " << st.boxes[0].col
+//                              << "  in   " <<
+//                              vertex.hero.row << " " << vertex.hero.col << " " << vertex.boxes[0].row << " "
+//                              << vertex.boxes[0].col << std::endl;
+                        q.push(st);
+                        answer[st] = true;
+                        nextState.insert({st, vertex});
+                        if (sg2 == -1) {
+                            next[st] = Path::right;
+                        } else {
+                            next[st] = Path::left;
+                        }
+                    }
+                }
             }
-            bound = value;
         }
     }
 
-private:
-    std::pair<bool, int> Search(std::vector<State>& path, int current_cost, int bound) {
-        State node = path.back();
-        int new_cost = current_cost + node.distance(puzzle_.goals);
-        if (new_cost > bound) {
-            return std::make_pair(false, new_cost);
-        }
-        if (node.success(puzzle_.goals)) {
-
-            return std::make_pair(true, bound);
-        }
-        int minimum = INT_MAX;
-        std::vector<Move*> moves { new Up(puzzle_.walls), new Down(puzzle_.walls), new Right(puzzle_.walls), new Left(puzzle_.walls) };
-
-        for (Move* move : moves) {
-            if (!move->can_move_in_direction(node)) {
-                continue;
+    std::string get_string_solution(Puzzle puzzle) {
+        wall = puzzle.walls;
+        goals = puzzle.goals;
+        getAns();
+        Position startMan = puzzle.player;
+        std::vector<Position> boxes = puzzle.boxes;
+        State st{startMan, boxes};
+        std::string res;
+        while (answer[st]) {
+            switch (next[st]) {
+                case Path::right:
+                    res += "r ";
+                    break;
+                case Path::left:
+                    res += "l ";
+                    break;
+                case Path::down:
+                    res += "d ";
+                    break;
+                case Path::up:
+                    res += "u ";
+                    break;
+                case Path::none:
+                    return res;
             }
-            State* new_state = move->get_state(node);
-            if (new_state == nullptr) {
-                continue;
-            }
-            if (std::find(path.begin(), path.end(), *new_state) == path.end()) {
-                path.push_back(*new_state);
-                bool found;
-                int value;
-                search_calls_++;
-                std::pair<bool, int> p = Search(path, current_cost + 1, bound);
-                found = p.first;
-                value = p.second;
-                if (found) {
-                    for (Move* move : moves) {
-                        delete move;
-                    }
-                    delete new_state;
-                    return std::make_pair(true, bound);
-
-                }
-                if (value != -1 && value < minimum) {
-                    minimum = value;
-                }
-                path.pop_back();
-            }
-            delete new_state;
+            st = nextState.at(st);
         }
-        for (Move* move : moves) {
-            delete move;
-        }
-        return std::make_pair(false, minimum);
+        return res;
     }
 
-//    void PrintSolution(const std::vector<State>& path) {
-//        std::cout << std::endl;
-//        std::cout << "Solution:" << std::endl;
-//        for (const State& state : path) {
-//            std::cout << "Player: (" << state.player.row << ", " << state.player.col << ") ";
-//            std::cout << "Boxes: ";
-//            for (const Position& box : state.boxes) {
-//                std::cout << "(" << box.row << ", " << box.col << ") ";
-//            }
-//            std::cout << std::endl;
-//        }
-//    }
-
-private:
-    Puzzle puzzle_;
-    int search_calls_ = 0;
 };
-//
-//int main() {
-//    Puzzle puzzle;
-//    puzzle.walls = {
-//            {0, 1, 0, 1, 0, 0},
-//            {0, 1, 0, 1, 1, 1},
-//            {1, 1, 0, 0, 0, 0},
-//            {0, 0, 0, 0, 1, 1},
-//            {1, 1, 1, 0, 1, 0},
-//            {0, 0, 1, 0, 1, 0}
-//    };
-//    puzzle.player = {3, 3};
-//    puzzle.boxes = {{2, 2}, {2, 4}, {3, 2}, {4, 3}};
-//    puzzle.goals = {{0, 2}, {2, 5}, {3, 0}, {5, 3}};
-//
-//    Solver solver(puzzle);
-//    std::cout << solver.Solve();
-//
-//    return 0;
-//}

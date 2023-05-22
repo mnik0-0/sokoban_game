@@ -10,6 +10,7 @@
 #include <QResizeEvent>
 #include "MatrixTableView.h"
 
+
 MatrixView::MatrixView(QWidget *parent) : QGraphicsView(parent) {
 
     setAlignment(Qt::AlignCenter);

@@ -9,14 +9,15 @@
 #include <QGridLayout>
 #include <QKeyEvent>
 #include <QLabel>
+#include <QThread>
 #include "MatrixTableView.h"
 #include "Controller.h"
-
+#include <QTimer>
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     controller_ = new Controller();
 
-    QPushButton* solveButton = new QPushButton(this);
+    QPushButton *solveButton = new QPushButton(this);
     solveButton->setText("Solve");
 
     resize(500, 700);
@@ -33,7 +34,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     layout->addWidget(solveButton, 0, 0);
     layout->addWidget(label_, 2, 0);
     layout->addWidget(view_, 3, 0);
-    connect(solveButton, &QPushButton::clicked, this, &MainWindow::printSolution);
+    connect(solveButton, &QPushButton::clicked, this, &MainWindow::showSolution);
 }
 
 MainWindow::~MainWindow() {}
@@ -63,9 +64,24 @@ void MainWindow::keyPressEvent(QKeyEvent *event) {
     QMainWindow::keyPressEvent(event);
 }
 
-void MainWindow::printSolution() {
+void MainWindow::showSolution() {
+
     std::string text = controller_->get_solution();
-    label_->setText(QString::fromStdString(text));
+    int currentIndex = 0;
+
+    QTimer* timer = new QTimer(this);
+    connect(timer, &QTimer::timeout, this, [=]() mutable {
+        if (currentIndex < text.size()) {
+            controller_->get_next_puzzle(text[currentIndex]);
+            view_->setMatrix(controller_->get_current_matrix());
+            currentIndex += 2;
+        } else {
+            timer->stop();
+            timer->deleteLater();
+        }
+    });
+    timer->start(200); // Запустить таймер с интервалом 1000 миллисекунд (1 секунда)
+    
 }
 
 

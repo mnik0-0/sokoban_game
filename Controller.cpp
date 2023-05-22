@@ -5,6 +5,7 @@
 #include "Controller.h"
 #include "solver/move.h"
 #include "Model.h"
+#include "solver/puzzle.h"
 
 Controller::Controller() {
     model_ = Model();
@@ -94,7 +95,7 @@ std::vector<std::vector<char>> Controller::converterToString(Puzzle puzzle) {
 
 Puzzle Controller::converterToPuzzle(std::vector<std::vector<char>> data) {
     Puzzle puzzle;
-    puzzle.walls = std::vector<std::vector<int>>(data.size(), std::vector<int>(data[0].size(), 0));
+    puzzle.walls = std::vector<std::vector<bool>>(data.size(), std::vector<bool>(data[0].size(), 0));
     for (int i = 0; i < data.size(); ++i) {
         for (int j = 0; j < data[0].size(); ++j) {
             switch (data[i][j]) {
@@ -135,6 +136,6 @@ Puzzle Controller::converterToPuzzle(std::vector<std::vector<char>> data) {
 }
 
 std::string Controller::get_solution() {
-    Solver solver(puzzle_);
-    return solver.Solve();
+    Solver solver;
+    return solver.get_string_solution(puzzle_);
 }

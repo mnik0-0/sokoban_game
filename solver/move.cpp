@@ -6,7 +6,7 @@
 #include "state.h"
 #include "algorithm"
 
-Move::Move(const std::vector<std::vector<int>> &walls) : walls(walls) {}
+Move::Move(const std::vector<std::vector<bool>> &walls) : walls(walls) {}
 
 State *Move::get_state(const State &state) {
     if (!can_move_in_direction(state)) {
