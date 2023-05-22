@@ -2,6 +2,8 @@
 // Created by Nikita on 21.05.2023.
 //
 
+#pragma once
+
 #ifndef GAME_SOKOBAN_MAINWINDOW_H
 #define GAME_SOKOBAN_MAINWINDOW_H
 
@@ -10,6 +12,7 @@
 #include <QGraphicsView>
 #include <QGraphicsScene>
 #include <QGraphicsPolygonItem>
+#include <QLabel>
 #include "Controller.h"
 #include "MatrixTableView.h"
 
@@ -28,9 +31,13 @@ public:
 protected:
     void keyPressEvent(QKeyEvent *event) override;
 
+private slots:
+    void printSolution();
+
 private:
     Controller* controller_;
     MatrixView* view_;
+    QLabel* label_;
 };
 
 QCursor getWhiteCursor();

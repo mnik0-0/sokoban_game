@@ -1,7 +1,7 @@
 //
 // Created by admin on 21.05.2023.
 //
-
+#pragma once
 #ifndef GAME_SOKOBAN_MOVE_H
 #define GAME_SOKOBAN_MOVE_H
 

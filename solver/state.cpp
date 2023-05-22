@@ -43,23 +43,25 @@ int State::manh_distance(const Position &box, const Position &goal) {
 }
 
 int State::distance(const std::vector<Position> &goals) {
-    std::vector<Position> tmp_boxes = boxes;
-    int result = 0;
-    for (const auto& goal : goals) {
+    int totalDistance = 0;
 
-        Position b{0, 0};
-        int d = INT_MAX;
-        for (const auto& box : tmp_boxes) {
-            int dist = manh_distance(box, goal);
-            if (dist < d) {
-                b = box;
-                d = dist;
+
+    for (const auto& boxCoord : boxes) {
+        int minDistance = INT_MAX;
+
+        for (const auto& targetCoord : goals) {
+
+            int distance = manh_distance(boxCoord, targetCoord);
+
+            if (distance < minDistance) {
+                minDistance = distance;
             }
         }
-        result += d;
-        tmp_boxes.erase(std::find(tmp_boxes.begin(), tmp_boxes.end(), b));
+
+        totalDistance += minDistance;
     }
-    return  result;
+
+    return totalDistance;
 }
 
 bool operator==(const State& a, const State& b) {

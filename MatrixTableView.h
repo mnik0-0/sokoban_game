@@ -1,7 +1,7 @@
 //
 // Created by Nikita on 21.05.2023.
 //
-
+#pragma once
 #ifndef GAME_SOKOBAN_MATRIXTABLEVIEW_H
 #define GAME_SOKOBAN_MATRIXTABLEVIEW_H
 

@@ -1,3 +1,5 @@
+#pragma once
+
 #include <iostream>
 #include <vector>
 #include <algorithm>
@@ -83,13 +85,22 @@ private:
                 found = p.first;
                 value = p.second;
                 if (found) {
+                    for (Move* move : moves) {
+                        delete move;
+                    }
+                    delete new_state;
                     return std::make_pair(true, bound);
+
                 }
                 if (value != -1 && value < minimum) {
                     minimum = value;
                 }
                 path.pop_back();
             }
+            delete new_state;
+        }
+        for (Move* move : moves) {
+            delete move;
         }
         return std::make_pair(false, minimum);
     }
@@ -111,7 +122,7 @@ private:
     Puzzle puzzle_;
     int search_calls_ = 0;
 };
-
+//
 //int main() {
 //    Puzzle puzzle;
 //    puzzle.walls = {

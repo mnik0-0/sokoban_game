@@ -4,24 +4,18 @@
 
 #include "Controller.h"
 #include "solver/move.h"
+#include "Model.h"
 
 Controller::Controller() {
+    model_ = Model();
     get_start_puzzle();
 }
 
 void Controller::get_start_puzzle() {
-    Puzzle puzzle;
-    puzzle.walls = {{0, 1, 0, 1, 0, 0},
-             {0, 1, 0, 1, 1, 1},
-             {1, 1, 0, 0, 0, 0},
-             {0, 0, 0, 0, 1, 1},
-             {1, 1, 1, 0, 1, 0},
-             {0, 0, 1, 0, 1, 0}};
-    puzzle.player = {3, 3};
-    puzzle.boxes = {{2, 2}, {2, 4}, {3, 2}, {4, 3}};
-    puzzle.goals = {{0, 2}, {2, 5}, {3, 0}, {5, 3}};
+    std::vector<std::vector<char>> tmp = model_.level_from_file();
 
-    puzzle_ = puzzle;
+    puzzle_ = converterToPuzzle(tmp);
+
 }
 
 void Controller::get_next_puzzle(char direction) {
@@ -40,7 +34,6 @@ void Controller::get_next_puzzle(char direction) {
             mv = new Right(puzzle_.walls);
             break;
     }
-
     State * state = mv->get_state(State(puzzle_.player, puzzle_.boxes));
     if (state == nullptr) {
         return;
@@ -97,4 +90,51 @@ std::vector<std::vector<char>> Controller::converterToString(Puzzle puzzle) {
     res[puzzle.player.row][puzzle.player.col] = '@';
 
     return res;
+}
+
+Puzzle Controller::converterToPuzzle(std::vector<std::vector<char>> data) {
+    Puzzle puzzle;
+    puzzle.walls = std::vector<std::vector<int>>(data.size(), std::vector<int>(data[0].size(), 0));
+    for (int i = 0; i < data.size(); ++i) {
+        for (int j = 0; j < data[0].size(); ++j) {
+            switch (data[i][j]) {
+
+                case '#': // стена - черный
+                    puzzle.walls[i][j] = 1;
+                    break;
+
+                case '@': // игрок - красный
+                    puzzle.player = Position{i, j};
+                    break;
+
+                case '+': // игрок + гоал - розоватый
+                    puzzle.player = Position{i, j};
+                    puzzle.goals.push_back(Position{i, j});
+                    break;
+
+                case '$': // бокс - коричневый
+                    puzzle.boxes.push_back(Position{i, j});
+                    break;
+
+                case '*': // бокс + гоал - зеленый
+                    puzzle.goals.push_back(Position{i, j});
+                    puzzle.boxes.push_back(Position{i, j});
+                    break;
+
+                case '.': // гоал - зеленый
+                    puzzle.goals.push_back(Position{i, j});
+                    break;
+
+                case ' ': // пустота - белый
+                    break;
+
+            }
+        }
+    }
+    return puzzle;
+}
+
+std::string Controller::get_solution() {
+    Solver solver(puzzle_);
+    return solver.Solve();
 }

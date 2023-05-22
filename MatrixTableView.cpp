@@ -7,10 +7,11 @@
 #include <QPen>
 #include <QColor>
 #include <QGraphicsItem>
+#include <QResizeEvent>
 #include "MatrixTableView.h"
 
 MatrixView::MatrixView(QWidget *parent) : QGraphicsView(parent) {
-    setRenderHint(QPainter::Antialiasing);
+
     setAlignment(Qt::AlignCenter);
 
     scene_ = new QGraphicsScene(this);
@@ -24,6 +25,7 @@ void MatrixView::setMatrix(const std::vector<std::vector<char>> &matrix) {
 }
 
 void MatrixView::resizeEvent(QResizeEvent *event) {
+    setSceneRect(QRectF(QPointF(0, 0), event->size()));
     QGraphicsView::resizeEvent(event);
     updateScene();
 }
@@ -53,7 +55,6 @@ void MatrixView::updateScene() {
         }
     }
 
-    fitInView(scene_->sceneRect(), Qt::KeepAspectRatio);
 }
 
 QColor MatrixView::getColorForValue(char value) {

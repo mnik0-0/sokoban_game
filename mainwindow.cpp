@@ -4,8 +4,11 @@
 #include <QVBoxLayout>
 #include <QComboBox>
 #include <QGraphicsView>
+#include <QPushButton>
 #include <QGraphicsScene>
+#include <QGridLayout>
 #include <QKeyEvent>
+#include <QLabel>
 #include "MatrixTableView.h"
 #include "Controller.h"
 
@@ -13,10 +16,13 @@
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     controller_ = new Controller();
 
+    QPushButton* solveButton = new QPushButton(this);
+    solveButton->setText("Solve");
 
     resize(500, 700);
+    label_ = new QLabel();
     QWidget *centralWidget = new QWidget(this);
-    QVBoxLayout *layout = new QVBoxLayout(centralWidget);
+    QGridLayout *layout = new QGridLayout(centralWidget);
     setCentralWidget(centralWidget);
 
     view_ = new MatrixView(this);
@@ -24,17 +30,18 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
 
     view_->setMatrix(controller_->get_current_matrix());
 
-    layout->addWidget(view_);
-
+    layout->addWidget(solveButton, 0, 0);
+    layout->addWidget(label_, 2, 0);
+    layout->addWidget(view_, 3, 0);
+    connect(solveButton, &QPushButton::clicked, this, &MainWindow::printSolution);
 }
 
 MainWindow::~MainWindow() {}
 
 void MainWindow::keyPressEvent(QKeyEvent *event) {
-    // Получение кода нажатой клавиши
+
     int key = event->key();
 
-    std::cout << "click" << std::endl;
     switch (key) {
         case Qt::Key_W:
             controller_->get_next_puzzle('u');
@@ -54,6 +61,11 @@ void MainWindow::keyPressEvent(QKeyEvent *event) {
     view_->setMatrix(controller_->get_current_matrix());
 
     QMainWindow::keyPressEvent(event);
+}
+
+void MainWindow::printSolution() {
+    std::string text = controller_->get_solution();
+    label_->setText(QString::fromStdString(text));
 }
 
 
