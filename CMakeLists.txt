@@ -27,6 +27,6 @@ set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "-Wall -O3")
 
 set(SOURCES solver/state.cpp solver/state.h solver/move.cpp solver/move.h solver/solver.cpp solver/solver.h main.cpp mainwindow.cpp mainwindow.h Controller.cpp Controller.h MatrixTableView.cpp MatrixTableView.h Model.cpp Model.h solver/position.cpp solver/position.h solver/puzzle.cpp solver/puzzle.h resources.qrc solver/state_solver.cpp solver/state_solver.h)
 
-qt5_add_big_resources(RESOURCES)
+qt6_add_big_resources(RESOURCES)
 add_executable(${PROJECT_NAME} ${SOURCES} ${RESOURCES})
 target_link_libraries(${PROJECT_NAME} ${REQUIRED_LIBS_QUALIFIED})
