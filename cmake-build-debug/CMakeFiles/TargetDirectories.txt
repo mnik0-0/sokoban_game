@@ -1,0 +1,5 @@
+C:/Users/admin/Desktop/sokoban/sokoban_game/cmake-build-debug/CMakeFiles/game_sokoban.dir
+C:/Users/admin/Desktop/sokoban/sokoban_game/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/admin/Desktop/sokoban/sokoban_game/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+C:/Users/admin/Desktop/sokoban/sokoban_game/cmake-build-debug/CMakeFiles/game_sokoban_autogen_timestamp_deps.dir
+C:/Users/admin/Desktop/sokoban/sokoban_game/cmake-build-debug/CMakeFiles/game_sokoban_autogen.dir
