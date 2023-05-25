@@ -4,8 +4,6 @@
 
 #pragma once
 
-#ifndef GAME_SOKOBAN_CONTROLLER_H
-#define GAME_SOKOBAN_CONTROLLER_H
 
 #include <vector>
 #include <Qt>
@@ -35,4 +33,3 @@ public:
     Model model_;
 };
 
-#endif //GAME_SOKOBAN_CONTROLLER_H

@@ -4,10 +4,6 @@
 
 #pragma once
 
-#ifndef GAME_SOKOBAN_MAINWINDOW_H
-#define GAME_SOKOBAN_MAINWINDOW_H
-
-
 #include <QMainWindow>
 #include <QGraphicsView>
 #include <QGraphicsScene>
@@ -32,7 +28,7 @@ protected:
     void keyPressEvent(QKeyEvent *event) override;
 
 private slots:
-    void printSolution();
+    void showSolution();
 
 private:
     Controller* controller_;
@@ -42,4 +38,3 @@ private:
 
 QCursor getWhiteCursor();
 
-#endif //GAME_SOKOBAN_MAINWINDOW_H
