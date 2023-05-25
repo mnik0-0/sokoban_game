@@ -4,6 +4,10 @@
         <file>levels/level2</file>
         <file>levels/level3</file>
         <file>levels/level4</file>
+        <file>levels/level5</file>
+        <file>levels/level6</file>
+        <file>levels/level7</file>
+        <file>levels/level8</file>
 
     </qresource>
 </RCC>

@@ -7,12 +7,15 @@
 
 #include "position.h"
 #include <vector>
+#include <functional>
 
 class StateS {
 public:
     StateS(Position player, const std::vector<std::vector<bool>> &boxes_matrix);
 
     bool operator<(const StateS &rhs) const;
+
+    bool operator==(const StateS &rhs) const;
 
 public:
     Position player;
