@@ -11,6 +11,7 @@
 #include <QLabel>
 #include "Controller.h"
 #include "MatrixTableView.h"
+#include "SolveButton.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -34,7 +35,6 @@ private slots:
 private:
     Controller* controller_;
     MatrixView* view_;
-    QLabel* label_;
 };
 
 QCursor getWhiteCursor();

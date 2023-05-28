@@ -13,15 +13,10 @@
 #include "MatrixTableView.h"
 #include "Controller.h"
 #include <QTimer>
+#include "SolveButton.h"
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     controller_ = new Controller();
-
-    QPushButton *solveButton = new QPushButton(this);
-    solveButton->setText("Solve");
-
-    QPushButton *resetButton = new QPushButton(this);
-    resetButton->setText("Reset");
 
     resize(500, 700);
     QWidget *centralWidget = new QWidget(this);
@@ -32,11 +27,12 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
 
     view_->setMatrix(controller_->get_current_matrix());
 
-    layout->addWidget(solveButton, 0, 0);
-    layout->addWidget(resetButton, 1, 0);
-    layout->addWidget(view_, 2, 0);
-    connect(solveButton, &QPushButton::clicked, this, &MainWindow::showSolution);
-    connect(resetButton, &QPushButton::clicked, this, &MainWindow::resetLevel);
+    ButtonPixmapItem * solveButtonItem = view_->getSolveButton();
+    ButtonPixmapItem * resetButtonItem = view_->getResetButton();
+
+    layout->addWidget(view_, 0, 0);
+    connect(solveButtonItem, &ButtonPixmapItem::clicked, this, &MainWindow::showSolution);
+    connect(resetButtonItem, &ButtonPixmapItem::clicked, this, &MainWindow::resetLevel);
 }
 
 MainWindow::~MainWindow() {}

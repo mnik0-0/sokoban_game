@@ -13,7 +13,7 @@
 
 std::vector<std::vector<char>> Model::level_from_file() {
 
-    QFile file(":levels/level5");
+    QFile file(":levels/level6");
     file.open(QIODevice::ReadOnly|QIODevice::Text);
 
 
