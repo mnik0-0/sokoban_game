@@ -20,8 +20,10 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     QPushButton *solveButton = new QPushButton(this);
     solveButton->setText("Solve");
 
+    QPushButton *resetButton = new QPushButton(this);
+    resetButton->setText("Reset");
+
     resize(500, 700);
-    label_ = new QLabel();
     QWidget *centralWidget = new QWidget(this);
     QGridLayout *layout = new QGridLayout(centralWidget);
     setCentralWidget(centralWidget);
@@ -31,9 +33,10 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     view_->setMatrix(controller_->get_current_matrix());
 
     layout->addWidget(solveButton, 0, 0);
-    layout->addWidget(label_, 2, 0);
-    layout->addWidget(view_, 3, 0);
+    layout->addWidget(resetButton, 1, 0);
+    layout->addWidget(view_, 2, 0);
     connect(solveButton, &QPushButton::clicked, this, &MainWindow::showSolution);
+    connect(resetButton, &QPushButton::clicked, this, &MainWindow::resetLevel);
 }
 
 MainWindow::~MainWindow() {}
@@ -81,6 +84,14 @@ void MainWindow::showSolution() {
     });
     timer->start(200);
     
+}
+
+void MainWindow::resetLevel() {
+    delete controller_;
+
+    controller_ = new Controller();
+
+    view_->setMatrix(controller_->get_current_matrix());
 }
 
 

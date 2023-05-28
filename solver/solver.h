@@ -121,7 +121,7 @@ public:
                     vertex.player = {i + 1, j};
 //                    answer[vertex] = true;
                     next[vertex] = Path::none;
-                    if (!checkWall(vertex.player.row, vertex.player.col) && !positions.contains(vertex.player)) {
+                    if (!checkWall(vertex.player.row, vertex.player.col) && positions.count(vertex.player) <= 0) {
                         positions.insert({vertex.player, 1});
                         q.push(vertex);
                     }
@@ -133,7 +133,7 @@ public:
                     vertex.player = {i - 1, j};
 //                    answer[vertex] = true;
                     next[vertex] = Path::none;
-                    if (!checkWall(vertex.player.row, vertex.player.col) && !positions.contains(vertex.player)) {
+                    if (!checkWall(vertex.player.row, vertex.player.col) && positions.count(vertex.player) <= 0) {
                         positions.insert({vertex.player, 1});
                         q.push(vertex);
                     }
@@ -145,7 +145,7 @@ public:
                     vertex.player = {i, j + 1};
 //                    answer[vertex] = true;
                     next[vertex] = Path::none;
-                    if (!checkWall(vertex.player.row, vertex.player.col) && !positions.contains(vertex.player)) {
+                    if (!checkWall(vertex.player.row, vertex.player.col) && positions.count(vertex.player) <= 0) {
                         positions.insert({vertex.player, 1});
                         q.push(vertex);
                     }
@@ -158,7 +158,7 @@ public:
                     vertex.player = {i, j - 1};
 //                    answer[vertex] = true;
                     next[vertex] = Path::none;
-                    if (!checkWall(vertex.player.row, vertex.player.col) && !positions.contains(vertex.player)) {
+                    if (!checkWall(vertex.player.row, vertex.player.col) && positions.count(vertex.player) <= 0) {
                         positions.insert({vertex.player, 1});
                         q.push(vertex);
                     }
@@ -186,7 +186,7 @@ public:
                     }
                     // если не было еще такого состояния
 
-                    if (!next.contains(st)) {
+                    if (next.count(st) <= 0) {
 
                         q.push(st);
 //                        answer[st] = true;
@@ -209,7 +209,7 @@ public:
                     }
                     st.boxes_matrix[pos2.row][pos2.col] = 0;
                     st.boxes_matrix[vertex.player.row][vertex.player.col] = 1;
-                    if (!next.contains(st)) {
+                    if (next.count(st) <= 0) {
 
                         q.push(st);
 //                        answer[st] = true;
@@ -236,7 +236,7 @@ public:
                         continue;
                     }
                     // если не было еще такого состояния
-                    if (!next.contains(st)) {
+                    if (next.count(st) <= 0) {
 
                         q.push(st);
 //                         answer[st] = true;
@@ -260,7 +260,7 @@ public:
                     }
                     st.boxes_matrix[pos2.row][pos2.col] = 0;
                     st.boxes_matrix[vertex.player.row][vertex.player.col] = 1;
-                    if (!next.contains(st)) {
+                    if (next.count(st) <= 0) {
 
                         q.push(st);
 //                        answer[st] = true;
@@ -296,7 +296,7 @@ public:
         getAns(startMan, boxes_matrix);
 
         std::string res;
-        while (next.contains(st)) {
+        while (next.count(st) > 0) {
             switch (next[st]) {
                 case Path::right:
                     st.player.col++;

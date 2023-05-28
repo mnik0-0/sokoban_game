@@ -21,7 +21,7 @@ protected:
 private:
     void updateScene();
 
-    QColor getColorForValue(char value);
+    QString getFileName(char value);
 
 private:
     std::vector<std::vector<char>> matrix_;

@@ -29,6 +29,7 @@ protected:
 
 private slots:
     void showSolution();
+    void resetLevel();
 
 private:
     Controller* controller_;

@@ -33,7 +33,8 @@ void MatrixView::resizeEvent(QResizeEvent *event) {
 
 void MatrixView::updateScene() {
     scene_->clear();
-
+    QPixmap backgroundImage(":img/flor");
+    scene_->setBackgroundBrush(QBrush(backgroundImage.scaled(viewport()->size())));
     if (matrix_.empty())
         return;
 
@@ -47,41 +48,41 @@ void MatrixView::updateScene() {
 
     for (int row = 0; row < numRows; ++row) {
         for (int col = 0; col < numCols; ++col) {
-            const char value = matrix_[row][col];
-            const QColor color = getColorForValue(value);
+            if (matrix_[row][col] == ' ') {
+                continue;
+            }
+            const QPixmap pixmap(getFileName(matrix_[row][col]));
 
-            QGraphicsRectItem *rectItem = scene_->addRect(xOffset + col * squareSize, yOffset + row * squareSize,
-                                                          squareSize, squareSize);
-            rectItem->setBrush(QBrush(color));
+            QGraphicsPixmapItem *pixmapItem = scene_->addPixmap(pixmap.scaled(squareSize, squareSize));
+            pixmapItem->setPos(xOffset + col * squareSize, yOffset + row * squareSize);
         }
     }
-
 }
 
-QColor MatrixView::getColorForValue(char value) {
+QString MatrixView::getFileName(char value) {
     switch (value) {
 
         case '#': // стена - черный
-            return QColor(0, 0, 0);
+            return ":img/wall";
 
         case '@': // игрок - красный
-            return QColor(255, 0, 0);
+            return ":img/player";
 
         case '+': // игрок + гоал - розоватый
-            return QColor(255, 165, 122);
+            return ":img/player";
 
         case '$': // бокс - коричневый
-            return QColor(128, 64, 48);
+            return ":img/box";
 
         case '*': // бокс + гоал - зеленый
-            return QColor(0, 255, 0);
+            return ":img/goalbox";
 
         case '.': // гоал - зеленый
-            return QColor(255, 255, 0);
+            return ":img/goal";
 
         case ' ': // пустота - белый
-            return QColor(255, 255, 255);
+            return ":img/flor";
 
     }
-    return QColor(0, 255, 255);
+    return ":img/flor";
 }

@@ -8,6 +8,12 @@
         <file>levels/level6</file>
         <file>levels/level7</file>
         <file>levels/level8</file>
+        <file>img/box.png</file>
+        <file>img/wall.png</file>
+        <file>img/flor.png</file>
+        <file>img/goal.png</file>
+        <file>img/player.png</file>
+        <file>img/goalbox.png</file>
 
     </qresource>
 </RCC>
