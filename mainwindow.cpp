@@ -33,6 +33,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     layout->addWidget(view_, 0, 0);
     connect(solveButtonItem, &ButtonPixmapItem::clicked, this, &MainWindow::showSolution);
     connect(resetButtonItem, &ButtonPixmapItem::clicked, this, &MainWindow::resetLevel);
+
+//    showFullScreen();
 }
 
 MainWindow::~MainWindow() {}
