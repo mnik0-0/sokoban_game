@@ -30,11 +30,15 @@ MatrixView::MatrixView(QWidget *parent) : QGraphicsView(parent) {
     reset_ = new ButtonPixmapItem(rPixmap.scaled(60, 60));
     scene_->addItem(reset_);
 
+    QPixmap backgroundImage(":img/flor");
+    scene_->setBackgroundBrush(QBrush(backgroundImage));
+
     reset_->setZValue(2.0);
 }
 
 void MatrixView::setMatrix(const std::vector<std::vector<char>> &matrix) {
     matrix_ = matrix;
+    map_.resize(matrix_.size(), QList<QPair<QGraphicsItem *, char>>(matrix_[0].size(), {nullptr, 'n'}));
     updateScene();
 }
 
@@ -45,15 +49,8 @@ void MatrixView::resizeEvent(QResizeEvent *event) {
 }
 
 
-
 void MatrixView::updateScene() {
-    for (QGraphicsItem *item : map_) {
-        scene_->removeItem(item);
-        delete item;
-    }
-    map_.clear();
-    QPixmap backgroundImage(":img/flor");
-    scene_->setBackgroundBrush(QBrush(backgroundImage));
+
     if (matrix_.empty())
         return;
 
@@ -67,14 +64,27 @@ void MatrixView::updateScene() {
 
     for (int row = 0; row < numRows; ++row) {
         for (int col = 0; col < numCols; ++col) {
-            if (matrix_[row][col] == ' ') {
+
+            if (map_[row][col].first == nullptr) {
+                if (matrix_[row][col] == ' ') {
+                    continue;
+                } else {
+                    const QPixmap pixmap(getFileName(matrix_[row][col]));
+                    QGraphicsPixmapItem *pixmapItem = scene_->addPixmap(pixmap.scaled(squareSize, squareSize));
+                    map_[row][col] = {pixmapItem, matrix_[row][col]};
+                    pixmapItem->setPos(xOffset + col * squareSize, yOffset + (row) * squareSize);
+                    continue;
+                }
+            }
+
+            if (map_[row][col].second != matrix_[row][col]) {
+                const QPixmap pixmap(getFileName(matrix_[row][col]));
+                QGraphicsPixmapItem *pixmapItem = scene_->addPixmap(pixmap.scaled(squareSize, squareSize));
+                map_[row][col] = {pixmapItem, matrix_[row][col]};
+                pixmapItem->setPos(xOffset + col * squareSize, yOffset + (row) * squareSize);
                 continue;
             }
-            const QPixmap pixmap(getFileName(matrix_[row][col]));
 
-            QGraphicsPixmapItem *pixmapItem = scene_->addPixmap(pixmap.scaled(squareSize, squareSize));
-            pixmapItem->setPos(xOffset + col * squareSize, yOffset + (row) * squareSize);
-            map_.push_back(pixmapItem);
         }
     }
 

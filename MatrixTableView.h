@@ -36,7 +36,7 @@ private:
     QGraphicsScene *scene_;
     ButtonPixmapItem *solve_;
     ButtonPixmapItem *reset_;
-    QList<QGraphicsItem *> map_;
+    QList<QList<QPair<QGraphicsItem *, char>>> map_;
 
 };
 
