@@ -8,6 +8,7 @@
 
 class Model {
 public:
-    std::vector<std::vector<char>> level_from_file();
+    std::vector<std::vector<char>> levelFromFile(int idLevel = -1);
+    int getMaxId();
 };
 

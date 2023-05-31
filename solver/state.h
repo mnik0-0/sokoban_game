@@ -9,7 +9,7 @@
 
 class State {
 public:
-    State(Position player, const std::vector<Position> &boxes, const std::vector<std::vector<bool>> &boxes_matrix = {});
+    State(Position player, const std::vector<Position> &boxes);
 
     bool success(const std::vector<Position>& goals);
 
@@ -18,7 +18,7 @@ public:
 public:
     Position player;
     std::vector<Position> boxes;
-    std::vector<std::vector<bool>> boxes_matrix;
+    std::vector<std::vector<bool>> boxesMatrix;
 };
 
 bool operator==(const State& a, const State& b);

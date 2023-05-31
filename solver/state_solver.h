@@ -19,7 +19,7 @@ public:
 
 public:
     Position player;
-    std::vector<std::vector<bool>> boxes_matrix;
+    std::vector<std::vector<bool>> boxesMatrix;
 };
 
 #endif //GAME_SOKOBAN_STATE_SOLVER_H

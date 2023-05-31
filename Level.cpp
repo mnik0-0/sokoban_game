@@ -8,15 +8,24 @@
 #include "MatrixTableView.h"
 #include <QGridLayout>
 #include <QTimer>
+#include <QRandomGenerator>
 
-Level::Level(QWidget *parent) : QWidget(parent) {
+Level::Level(QWidget *parent, int id) : QWidget(parent) {
     controller_ = new Controller();
+    int len = controller_->getMaxId();
+    if (id == -1) {
+        level_ = (QRandomGenerator::global()->bounded(len) + 1);
+    } else {
+        level_ = id;
+    }
+
+    controller_ = new Controller(level_);
 
     resize(500, 700);
     QGridLayout *layout = new QGridLayout(this);
 
     view_ = new MatrixView(this);
-    view_->setMatrix(controller_->get_current_matrix());
+    view_->setMatrix(controller_->getCurrentMatrix());
 
     ButtonPixmapItem *solveButtonItem = view_->getSolveButton();
     ButtonPixmapItem *resetButtonItem = view_->getResetButton();
@@ -39,24 +48,28 @@ void Level::keyPressEvent(QKeyEvent *event) {
     switch (key) {
         case Qt::Key_W:
             steps_++;
-            controller_->get_next_puzzle('u');
+            controller_->getNextPuzzle('u');
             break;
         case Qt::Key_S:
             steps_++;
-            controller_->get_next_puzzle('d');
+            controller_->getNextPuzzle('d');
             break;
         case Qt::Key_A:
             steps_++;
-            controller_->get_next_puzzle('l');
+            controller_->getNextPuzzle('l');
             break;
         case Qt::Key_D:
             steps_++;
-            controller_->get_next_puzzle('r');
+            controller_->getNextPuzzle('r');
             break;
         default:
             break;
     }
-    view_->setMatrix(controller_->get_current_matrix());
+    if (controller_->isSolved()) {
+        view_->setFinish();
+        solving_ = true;
+    }
+    view_->setMatrix(controller_->getCurrentMatrix());
 
     QWidget::keyPressEvent(event);
 }
@@ -66,15 +79,15 @@ void Level::showSolution() {
         return;
     }
     solving_ = true;
-    std::string text = controller_->get_solution();
+    std::string text = controller_->getSolution();
 
     int currentIndex = 0;
 
     QTimer *timer = new QTimer(this);
     connect(timer, &QTimer::timeout, this, [=]() mutable {
         if (currentIndex < text.size()) {
-            controller_->get_next_puzzle(text[currentIndex]);
-            view_->setMatrix(controller_->get_current_matrix());
+            controller_->getNextPuzzle(text[currentIndex]);
+            view_->setMatrix(controller_->getCurrentMatrix());
             currentIndex += 2;
         } else {
             timer->stop();
@@ -93,9 +106,9 @@ void Level::resetLevel() {
     }
     delete controller_;
 
-    controller_ = new Controller();
+    controller_ = new Controller(level_);
 
-    view_->setMatrix(controller_->get_current_matrix());
+    view_->setMatrix(controller_->getCurrentMatrix());
 }
 
 void Level::goToMenuSlot() {

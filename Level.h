@@ -12,7 +12,7 @@
 class Level: public QWidget {
     Q_OBJECT
 public:
-    explicit Level(QWidget *parent = nullptr);
+    explicit Level(QWidget *parent = nullptr, int id = -1);
 
 protected:
     void keyPressEvent(QKeyEvent *event) override;
@@ -31,6 +31,7 @@ private:
     bool solving_ = false;
     bool solved_ = false;
     int steps_ = 0;
+    int level_;
 };
 
 #endif //GAME_SOKOBAN_LEVEL_H

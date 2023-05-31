@@ -6,14 +6,14 @@
 
 bool StateS::operator<(const StateS &rhs) const {
     if (player == rhs.player) {
-        return boxes_matrix < rhs.boxes_matrix;
+        return boxesMatrix < rhs.boxesMatrix;
     }
     return player < rhs.player;
 }
 
-StateS::StateS(Position player, const std::vector<std::vector<bool>> &boxes_matrix) : player(player), boxes_matrix(boxes_matrix) {}
+StateS::StateS(Position player, const std::vector<std::vector<bool>> &boxes_matrix) : player(player), boxesMatrix(boxes_matrix) {}
 
 bool StateS::operator==(const StateS &rhs) const {
-    return (player == rhs.player && boxes_matrix == rhs.boxes_matrix);
+    return (player == rhs.player && boxesMatrix == rhs.boxesMatrix);
 }
 

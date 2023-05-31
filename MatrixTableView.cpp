@@ -9,37 +9,42 @@
 #include <QGraphicsItem>
 #include <QResizeEvent>
 #include <QGraphicsPixmapItem>
+#include <QMouseEvent>
 #include "MatrixTableView.h"
 #include "PixmapButton.h"
 #include <iostream>
 
 
-MatrixView::MatrixView(QWidget *parent) : QGraphicsView(parent) {
+MatrixView::MatrixView(QWidget *parent, bool resized, bool buttons, bool clickable, int id) : QGraphicsView(parent), resized_(resized), buttons_(buttons), clickable_(clickable), id_(id) {
 
     setAlignment(Qt::AlignCenter);
 
     scene_ = new QGraphicsScene(this);
     setScene(scene_);
 
-    const QPixmap solvePixmap(":img/solve.png");
-    solve_ = new ButtonPixmapItem(solvePixmap.scaled(60, 60));
-    scene_->addItem(solve_);
+    if (buttons) {
+        const QPixmap solvePixmap(":img/solve.png");
+        solve_ = new ButtonPixmapItem(solvePixmap.scaled(60, 60));
+        scene_->addItem(solve_);
+
+        const QPixmap resetPixmap(":img/reset.png");
+        reset_ = new ButtonPixmapItem(resetPixmap.scaled(60, 60));
+        scene_->addItem(reset_);
+
+        const QPixmap returnPixmap(":img/home.png");
+        return_ = new ButtonPixmapItem(returnPixmap.scaled(60, 60));
+        scene_->addItem(return_);
 
 
-    const QPixmap resetPixmap(":img/reset.png");
-    reset_ = new ButtonPixmapItem(resetPixmap.scaled(60, 60));
-    scene_->addItem(reset_);
 
-    const QPixmap returnPixmap(":img/home.png");
-    return_ = new ButtonPixmapItem(returnPixmap.scaled(60, 60));
-    scene_->addItem(return_);
+        solve_->setZValue(2.0);
+        reset_->setZValue(2.0);
+        return_->setZValue(2.0);
+    }
+
 
     QPixmap backgroundImage(":img/flor.png");
     scene_->setBackgroundBrush(QBrush(backgroundImage));
-
-    solve_->setZValue(2.0);
-    reset_->setZValue(2.0);
-    return_->setZValue(2.0);
 }
 
 void MatrixView::setMatrix(const std::vector<std::vector<char>> &matrix) {
@@ -48,8 +53,14 @@ void MatrixView::setMatrix(const std::vector<std::vector<char>> &matrix) {
 }
 
 void MatrixView::resizeEvent(QResizeEvent *event) {
-    setSceneRect(QRectF(QPointF(0, 0), event->size()));
     QGraphicsView::resizeEvent(event);
+    if (!resized_) {
+        if (normalSize_) {
+            return;
+        }
+        normalSize_ = true;
+    }
+    setSceneRect(QRectF(QPointF(0, 0), event->size()));
     updateScene();
 }
 
@@ -61,8 +72,7 @@ void MatrixView::updateScene() {
         delete item;
     }
     map_.clear();
-    QPixmap backgroundImage(":img/flor");
-    scene_->setBackgroundBrush(QBrush(backgroundImage));
+
     if (matrix_.empty())
         return;
 
@@ -86,10 +96,20 @@ void MatrixView::updateScene() {
             map_.push_back(pixmapItem);
         }
     }
+    if (buttons_) {
+        if (solved_) {
+            const QPixmap pixmap(":img/win.png");
+            int size = std::min(viewport()->height(), viewport()->width()) / 2;
+            QGraphicsPixmapItem *pixmapItem = scene_->addPixmap(pixmap.scaled(size, size));
 
-    solve_->setPos(0, 0);
-    reset_->setPos(viewport()->width() - 60, 0);
-    return_->setPos(viewport()->width() - 60, viewport()->height() - 60);
+            pixmapItem->setPos((viewport()->width() - size) / 2, (viewport()->height() - size) / 2);
+            map_.push_back(pixmapItem);
+        }
+
+        solve_->setPos(0, 0);
+        reset_->setPos(viewport()->width() - 60, 0);
+        return_->setPos(viewport()->width() - 60, viewport()->height() - 60);
+    }
 
 }
 
@@ -131,4 +151,17 @@ ButtonPixmapItem *MatrixView::getResetButton() {
 
 ButtonPixmapItem *MatrixView::getReturnButton() {
     return return_;
+}
+
+void MatrixView::setFinish() {
+    solved_ = true;
+    updateScene();
+}
+
+void MatrixView::mousePressEvent(QMouseEvent* event) {
+    QGraphicsView::mousePressEvent(event);
+    if (!clickable_) {
+        return;
+    }
+    emit clicked(id_);
 }

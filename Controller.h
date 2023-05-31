@@ -14,21 +14,27 @@
 
 class Controller {
 public:
-    Controller();
+    Controller(int id = -1);
 
     std::vector<std::vector<char>> converterToString(Puzzle puzzle);
 
     Puzzle converterToPuzzle(std::vector<std::vector<char>> data);
 
-    void get_start_puzzle();
+    void getStartPuzzle(int id = -1);
 
-    void get_next_puzzle(char direction);
+    void getNextPuzzle(char direction);
 
-    std::vector<std::vector<char>> get_current_matrix();
+    std::vector<std::vector<char>> getCurrentMatrix();
 
-    std::string get_solution();
+    std::string getSolution();
 
     void setPuzzle(const std::vector<std::vector<char>> &level);
+
+    int getMaxId();
+
+    bool isSolved();
+
+    std::vector<std::vector<char>> getPuzzleById(int id);
 
 public:
     Puzzle puzzle_;

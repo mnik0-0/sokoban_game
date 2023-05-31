@@ -9,7 +9,7 @@
 #include "algorithm"
 #include "position.h"
 
-State::State(Position player, const std::vector<Position> &boxes, const std::vector<std::vector<bool>>& boxes_matrix) : player(player), boxes(boxes), boxes_matrix(boxes_matrix) {}
+State::State(Position player, const std::vector<Position> &boxes) : player(player), boxes(boxes) {}
 
 bool State::success(const std::vector<Position>& goals) {
     std::map<std::string, int> count;
@@ -45,17 +45,3 @@ bool State::operator<(const State &rhs) const {
 bool operator==(const State& a, const State& b) {
     return a.player == b.player && a.boxes == b.boxes;
 }
-
-
-//int main() {
-//
-//    std::vector<Position> boxes = { {1, 1}, {3, 1}, {5, 6} };
-//    std::vector<Position> goals = { {5, 6}, {1, 1}, {3, 1} };
-//    Position p{1,2};
-//    State solver(p, boxes);
-////    int result = solver.distance(goals);
-////    std::cout << "Результат: " << result << std::endl;
-//    std::cout << solver.success(goals);
-//
-//    return 0;
-//}

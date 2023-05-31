@@ -8,12 +8,12 @@
 
 Move::Move(const std::vector<std::vector<bool>> &walls) : walls(walls) {}
 
-State *Move::get_state(const State &state) {
-    if (!can_move_in_direction(state)) {
+State *Move::getState(const State &state) {
+    if (!canMoveInDirection(state)) {
         return nullptr;
     }
 
-    Position target_player_pos = Position{next_row(state), next_col(state)};
+    Position target_player_pos = Position{nextRow(state), nextCol(state)};
 
     if (walls[target_player_pos.row][target_player_pos.col]) {
         return nullptr;
@@ -22,8 +22,8 @@ State *Move::get_state(const State &state) {
     if (std::find(state.boxes.begin(), state.boxes.end(), target_player_pos) == state.boxes.end()) {
         return new State(target_player_pos, state.boxes);
     } else {
-        Position target_box_pos = Position{next_next_row(state), next_next_col(state)};
-        if (can_move_box_in_direction(state) &&
+        Position target_box_pos = Position{nextNextRow(state), nextNextCol(state)};
+        if (canMoveBoxInDirection(state) &&
             !walls[target_box_pos.row][target_box_pos.col] &&
             std::find(state.boxes.begin(), state.boxes.end(), target_box_pos) == state.boxes.end()) {
 

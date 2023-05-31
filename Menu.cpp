@@ -16,19 +16,20 @@ MenuWidget::MenuWidget(QWidget *parent) : QGraphicsView(parent) {
 
     play_ = new ButtonPixmapItem(QPixmap(":img/play.png"));
 
-    sound_ = new ButtonPixmapItem(QPixmap(":img/sound.png"));
+    levels_ = new ButtonPixmapItem(QPixmap(":img/levels.png"));
 
     exit_ = new ButtonPixmapItem(QPixmap(":img/exit.png"));
 
 
     scene_->addItem(play_);
 
-    scene_->addItem(sound_);
+    scene_->addItem(levels_);
 
     scene_->addItem(exit_);
     updateScene();
 
     connect(play_, &ButtonPixmapItem::clicked, this, &MenuWidget::onPlayClicked);
+    connect(levels_, &ButtonPixmapItem::clicked, this, &MenuWidget::onSelectorClicked);
 }
 
 void MenuWidget::resizeEvent(QResizeEvent *event) {
@@ -55,16 +56,20 @@ void MenuWidget::updateScene() {
 
     play_->setPos(buttonX, buttonY);
 
-    sound_->setPos(buttonX, buttonY + buttonHeight + spacing);
+    levels_->setPos(buttonX, buttonY + buttonHeight + spacing);
 
     exit_->setPos(buttonX, buttonY + (buttonHeight + spacing) * 2);
 
 
     play_->setPixmap(QPixmap(":img/play.png").scaled(buttonWidth, buttonHeight));
-    sound_->setPixmap(QPixmap(":img/sound.png").scaled(buttonWidth, buttonHeight));
+    levels_->setPixmap(QPixmap(":img/levels.png").scaled(buttonWidth, buttonHeight));
     exit_->setPixmap(QPixmap(":img/exit.png").scaled(buttonWidth, buttonHeight));
 }
 
 void MenuWidget::onPlayClicked() {
     emit goToLevel();
+}
+
+void MenuWidget::onSelectorClicked() {
+    emit goToLevelSelector();
 }

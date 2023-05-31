@@ -7,17 +7,17 @@
 #include "Model.h"
 #include "solver/puzzle.h"
 
-Controller::Controller() {
+Controller::Controller(int id) {
     model_ = Model();
-    get_start_puzzle();
+    getStartPuzzle(id);
 }
 
-void Controller::get_start_puzzle() {
-    std::vector<std::vector<char>> tmp = model_.level_from_file();
+void Controller::getStartPuzzle(int id) {
+    std::vector<std::vector<char>> tmp = model_.levelFromFile(id);
     puzzle_ = converterToPuzzle(tmp);
 }
 
-void Controller::get_next_puzzle(char direction) {
+void Controller::getNextPuzzle(char direction) {
     Move * mv = nullptr;
     switch (direction) {
         case 'u':
@@ -33,7 +33,7 @@ void Controller::get_next_puzzle(char direction) {
             mv = new Right(puzzle_.walls);
             break;
     }
-    State * state = mv->get_state(State(puzzle_.player, puzzle_.boxes));
+    State * state = mv->getState(State(puzzle_.player, puzzle_.boxes));
     if (state == nullptr) {
         return;
     }
@@ -46,7 +46,7 @@ void Controller::get_next_puzzle(char direction) {
 
 }
 
-std::vector<std::vector<char>> Controller::get_current_matrix() {
+std::vector<std::vector<char>> Controller::getCurrentMatrix() {
     return converterToString(puzzle_);
 }
 
@@ -133,7 +133,7 @@ Puzzle Controller::converterToPuzzle(std::vector<std::vector<char>> data) {
     return puzzle;
 }
 
-std::string Controller::get_solution() {
+std::string Controller::getSolution() {
     Solver solver;
     return solver.get_string_solution(puzzle_);
 }
@@ -142,3 +142,17 @@ void Controller::setPuzzle(const std::vector<std::vector<char>> &level) {
     puzzle_ = converterToPuzzle(level);
 }
 
+bool Controller::isSolved() {
+    State * st = new State(puzzle_.player, puzzle_.boxes);
+    bool res = st->success(puzzle_.goals);
+    delete st;
+    return res;
+}
+
+int Controller::getMaxId() {
+    return model_.getMaxId();
+}
+
+std::vector<std::vector<char>> Controller::getPuzzleById(int id) {
+    return model_.levelFromFile(id);
+}

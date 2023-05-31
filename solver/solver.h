@@ -30,9 +30,9 @@ public:
         res += stateS.player.col * step[0];
         res += (stateS.player.row * step[1]) % MOD;
         int p = 2;
-        for (int i = 0; i < stateS.boxes_matrix.size(); ++i) {
-            for (int j = 0; j < stateS.boxes_matrix[0].size(); ++j) {
-                res = (res + (stateS.boxes_matrix[i][j] * step[p]) % MOD) % MOD;
+        for (int i = 0; i < stateS.boxesMatrix.size(); ++i) {
+            for (int j = 0; j < stateS.boxesMatrix[0].size(); ++j) {
+                res = (res + (stateS.boxesMatrix[i][j] * step[p]) % MOD) % MOD;
                 p++;
             }
         }
@@ -52,10 +52,10 @@ public:
         if (row1 == -1) {
             return old_hash;
         }
-        int row_size = stateS.boxes_matrix[0].size();
+        int row_size = stateS.boxesMatrix[0].size();
 
-        bool item1 = stateS.boxes_matrix[row1][col1];
-        bool item2 = stateS.boxes_matrix[row2][col2];
+        bool item1 = stateS.boxesMatrix[row1][col1];
+        bool item2 = stateS.boxesMatrix[row2][col2];
 
         old_hash = (old_hash - (item1 * step[row1 * row_size + col1 + 2]) % MOD + MOD) % MOD;
         old_hash = (old_hash - (item2 * step[row2 * row_size + col2 + 2]) % MOD + MOD) % MOD;
@@ -106,7 +106,7 @@ public:
                      {{0, 0}}};
 
 
-        vertex.boxes_matrix = goals_matrix;
+        vertex.boxesMatrix = goals_matrix;
 
         std::map<Position, int> positions;
         // расставляем главного героя
@@ -177,9 +177,9 @@ public:
             for (int sg1: {-1, 1}) {
                 for (int sg2: {0}) {
                     const Position pos{vertex.player.row + sg1, vertex.player.col + sg2};
-                    StateS st{pos, vertex.boxes_matrix};
+                    StateS st{pos, vertex.boxesMatrix};
                     if (checkWall(vertex.player.row + sg1, vertex.player.col + sg2) ||
-                        vertex.boxes_matrix[pos.row][pos.col]) {
+                        vertex.boxesMatrix[pos.row][pos.col]) {
                         continue;
                     }
                     long long n_hash = get_next_hash(vertex, old_hash, st.player.col, st.player.row, -1, -1, -1, -1);
@@ -195,11 +195,11 @@ public:
                     }
                     Position pos2{vertex.player.row - sg1, vertex.player.col - sg2};
 
-                    if (checkWall(pos2.row, pos2.col) || !st.boxes_matrix[pos2.row][pos2.col]) {
+                    if (checkWall(pos2.row, pos2.col) || !st.boxesMatrix[pos2.row][pos2.col]) {
                         continue;
                     }
-                    st.boxes_matrix[pos2.row][pos2.col] = 0;
-                    st.boxes_matrix[vertex.player.row][vertex.player.col] = 1;
+                    st.boxesMatrix[pos2.row][pos2.col] = 0;
+                    st.boxesMatrix[vertex.player.row][vertex.player.col] = 1;
 
                     long long n_hash_box = get_next_hash(vertex, old_hash, st.player.col, st.player.row, pos2.row, pos2.col, vertex.player.row, vertex.player.col);
                     if (next_ll[n_hash_box] == Path::none) {
@@ -220,9 +220,9 @@ public:
             for (int sg1: {0}) {
                 for (int sg2: {-1, 1}) {
                     Position pos{vertex.player.row + sg1, vertex.player.col + sg2};
-                    StateS st{pos, vertex.boxes_matrix};
+                    StateS st{pos, vertex.boxesMatrix};
                     if (checkWall(vertex.player.row + sg1, vertex.player.col + sg2) ||
-                        vertex.boxes_matrix[pos.row][pos.col]) {
+                        vertex.boxesMatrix[pos.row][pos.col]) {
                         continue;
                     }
                     long long n_hash = get_next_hash(vertex, old_hash, st.player.col, st.player.row, -1, -1, -1, -1);
@@ -240,11 +240,11 @@ public:
                     Position pos2{vertex.player.row - sg1, vertex.player.col - sg2};
 
 
-                    if (checkWall(pos2.row, pos2.col) || !st.boxes_matrix[pos2.row][pos2.col]) {
+                    if (checkWall(pos2.row, pos2.col) || !st.boxesMatrix[pos2.row][pos2.col]) {
                         continue;
                     }
-                    st.boxes_matrix[pos2.row][pos2.col] = 0;
-                    st.boxes_matrix[vertex.player.row][vertex.player.col] = 1;
+                    st.boxesMatrix[pos2.row][pos2.col] = 0;
+                    st.boxesMatrix[vertex.player.row][vertex.player.col] = 1;
                     long long n_hash_box = get_next_hash(vertex, old_hash, st.player.col, st.player.row, pos2.row, pos2.col, vertex.player.row, vertex.player.col);
                     if (next_ll[n_hash_box] == Path::none) {
 
@@ -286,33 +286,33 @@ public:
             switch (next_ll[hash]) {
                 case Path::right:
                     st.player.col++;
-                    if (st.boxes_matrix[st.player.row][st.player.col]) {
-                        st.boxes_matrix[st.player.row][st.player.col] = 0;
-                        st.boxes_matrix[st.player.row][st.player.col + 1] = 1;
+                    if (st.boxesMatrix[st.player.row][st.player.col]) {
+                        st.boxesMatrix[st.player.row][st.player.col] = 0;
+                        st.boxesMatrix[st.player.row][st.player.col + 1] = 1;
                     }
                     res += "r ";
                     break;
                 case Path::left:
                     st.player.col--;
-                    if (st.boxes_matrix[st.player.row][st.player.col]) {
-                        st.boxes_matrix[st.player.row][st.player.col] = 0;
-                        st.boxes_matrix[st.player.row][st.player.col - 1] = 1;
+                    if (st.boxesMatrix[st.player.row][st.player.col]) {
+                        st.boxesMatrix[st.player.row][st.player.col] = 0;
+                        st.boxesMatrix[st.player.row][st.player.col - 1] = 1;
                     }
                     res += "l ";
                     break;
                 case Path::down:
                     st.player.row++;
-                    if (st.boxes_matrix[st.player.row][st.player.col]) {
-                        st.boxes_matrix[st.player.row][st.player.col] = 0;
-                        st.boxes_matrix[st.player.row + 1][st.player.col] = 1;
+                    if (st.boxesMatrix[st.player.row][st.player.col]) {
+                        st.boxesMatrix[st.player.row][st.player.col] = 0;
+                        st.boxesMatrix[st.player.row + 1][st.player.col] = 1;
                     }
                     res += "d ";
                     break;
                 case Path::up:
                     st.player.row--;
-                    if (st.boxes_matrix[st.player.row][st.player.col]) {
-                        st.boxes_matrix[st.player.row][st.player.col] = 0;
-                        st.boxes_matrix[st.player.row - 1][st.player.col] = 1;
+                    if (st.boxesMatrix[st.player.row][st.player.col]) {
+                        st.boxesMatrix[st.player.row][st.player.col] = 0;
+                        st.boxesMatrix[st.player.row - 1][st.player.col] = 1;
                     }
                     res += "u ";
                     break;

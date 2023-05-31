@@ -15,6 +15,7 @@
 #include "Menu.h"
 #include "Level.h"
 #include "CreateLevel.h"
+#include "LevelSelector.h"
 
 class MainWindow : public QMainWindow {
 Q_OBJECT
@@ -26,12 +27,15 @@ public:
 
 private slots:
     void showLevel();
+    void showLevelById(int i);
     void showMenu();
+    void showLevelSelector();
 
 private:
     MenuWidget* menuWidget_;
     Level* level_;
     CreateLevel* createLevel_;
+    LevelSelector* levelSelector_;
 };
 
 QCursor getWhiteCursor();

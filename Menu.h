@@ -23,14 +23,16 @@ protected:
 
 signals:
     void goToLevel();
+    void goToLevelSelector();
 
 private slots:
     void onPlayClicked();
+    void onSelectorClicked();
 
 private:
     ButtonPixmapItem *play_;
 
-    ButtonPixmapItem *sound_;
+    ButtonPixmapItem *levels_;
 
     ButtonPixmapItem *exit_;
 

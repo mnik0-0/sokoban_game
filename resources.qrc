@@ -1,14 +1,12 @@
 <RCC>
     <qresource>
-        <file>levels/level1</file>
-        <file>levels/level2</file>
-        <file>levels/level3</file>
-        <file>levels/level4</file>
-        <file>levels/level5</file>
-        <file>levels/level6</file>
-        <file>levels/level7</file>
-        <file>levels/level8</file>
-        <file>levels/level9</file>
+        <file>levels/levels.json</file>
+
+
+
+
+
+
         <file>img/box.png</file>
         <file>img/wall.png</file>
         <file>img/flor.png</file>
@@ -25,6 +23,7 @@
         <file>img/sound.png</file>
         <file>img/win.png</file>
         <file>img/menu.jpg</file>
+        <file>img/levels.png</file>
 
     </qresource>
 </RCC>
