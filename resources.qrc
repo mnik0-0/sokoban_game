@@ -17,7 +17,12 @@
         <file>img/goalbox.png</file>
         <file>img/goalplayer.png</file>
         <file>img/reset.png</file>
+        <file>img/home.png</file>
         <file>img/solve.png</file>
+        <file>img/button.png</file>
+        <file>img/exit.png</file>
+        <file>img/play.png</file>
+        <file>img/sound.png</file>
 
     </qresource>
 </RCC>

@@ -2,8 +2,8 @@
 // Created by admin on 28.05.2023.
 //
 
-#ifndef GAME_SOKOBAN_SOLVEBUTTON_H
-#define GAME_SOKOBAN_SOLVEBUTTON_H
+#ifndef GAME_SOKOBAN_PIXMAPBUTTON_H
+#define GAME_SOKOBAN_PIXMAPBUTTON_H
 
 #include <QApplication>
 #include <QGraphicsView>
@@ -28,4 +28,4 @@ protected:
     void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
 };
 
-#endif //GAME_SOKOBAN_SOLVEBUTTON_H
+#endif //GAME_SOKOBAN_PIXMAPBUTTON_H

@@ -28,8 +28,13 @@ public:
 
     std::string get_solution();
 
+    void setPuzzle(const std::vector<std::vector<char>> &level);
+
+    bool isSolved();
+
 public:
     Puzzle puzzle_;
     Model model_;
+    bool solved_ = false;
 };
 

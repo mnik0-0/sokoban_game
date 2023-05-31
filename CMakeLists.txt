@@ -18,16 +18,16 @@ if (NOT CMAKE_PREFIX_PATH)
             "(-DCMAKE_PREFIX_PATH=\"path/to/Qt/lib/cmake\")")
 endif ()
 
-set(QT_VERSION 5)
+set(QT_VERSION 6)
 set(REQUIRED_LIBS Core Widgets)
-set(REQUIRED_LIBS_QUALIFIED Qt5::Core Qt5::Widgets)
+set(REQUIRED_LIBS_QUALIFIED Qt6::Core Qt6::Widgets)
 find_package(Qt${QT_VERSION} COMPONENTS ${REQUIRED_LIBS} REQUIRED)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "-Wall -O3")
 
-set(SOURCES solver/state.cpp solver/state.h solver/move.cpp solver/move.h solver/solver.cpp solver/solver.h main.cpp mainwindow.cpp mainwindow.h Controller.cpp Controller.h MatrixTableView.cpp MatrixTableView.h Model.cpp Model.h solver/position.cpp solver/position.h solver/puzzle.cpp solver/puzzle.h resources.qrc solver/state_solver.cpp solver/state_solver.h SolveButton.cpp SolveButton.h)
+set(SOURCES solver/state.cpp solver/state.h solver/move.cpp solver/move.h solver/solver.cpp solver/solver.h main.cpp mainwindow.cpp mainwindow.h Controller.cpp Controller.h MatrixTableView.cpp MatrixTableView.h Model.cpp Model.h solver/position.cpp solver/position.h solver/puzzle.cpp solver/puzzle.h resources.qrc solver/state_solver.cpp solver/state_solver.h PixmapButton.cpp PixmapButton.h Menu.cpp Menu.h Level.cpp Level.h CreateLevel.cpp CreateLevel.h)
 
-qt5_add_big_resources(RESOURCES)
+qt6_add_big_resources(RESOURCES)
 add_executable(${PROJECT_NAME} ${SOURCES} ${RESOURCES})
 target_link_libraries(${PROJECT_NAME} ${REQUIRED_LIBS_QUALIFIED})

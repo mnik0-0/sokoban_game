@@ -11,11 +11,10 @@
 #include <QLabel>
 #include "Controller.h"
 #include "MatrixTableView.h"
-#include "SolveButton.h"
-
-QT_BEGIN_NAMESPACE
-namespace Ui { class MainWindow; }
-QT_END_NAMESPACE
+#include "PixmapButton.h"
+#include "Menu.h"
+#include "Level.h"
+#include "CreateLevel.h"
 
 class MainWindow : public QMainWindow {
 Q_OBJECT
@@ -25,16 +24,14 @@ public:
 
     ~MainWindow() override;
 
-protected:
-    void keyPressEvent(QKeyEvent *event) override;
-
 private slots:
-    void showSolution();
-    void resetLevel();
+    void showLevel();
+    void showMenu();
 
 private:
-    Controller* controller_;
-    MatrixView* view_;
+    MenuWidget* menuWidget_;
+    Level* level_;
+    CreateLevel* createLevel_;
 };
 
 QCursor getWhiteCursor();

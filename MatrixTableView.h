@@ -9,7 +9,7 @@
 #include <QPen>
 #include <QColor>
 #include <QGraphicsItem>
-#include "SolveButton.h"
+#include "PixmapButton.h"
 #include "Controller.h"
 
 class MatrixView : public QGraphicsView {
@@ -22,6 +22,7 @@ public:
 
     ButtonPixmapItem* getSolveButton();
     ButtonPixmapItem* getResetButton();
+    ButtonPixmapItem* getReturnButton();
 
 protected:
     void resizeEvent(QResizeEvent *event) override;
@@ -36,6 +37,7 @@ private:
     QGraphicsScene *scene_;
     ButtonPixmapItem *solve_;
     ButtonPixmapItem *reset_;
+    ButtonPixmapItem *return_;
     QList<QGraphicsItem *> map_;
 
 };

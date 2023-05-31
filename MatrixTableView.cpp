@@ -10,7 +10,7 @@
 #include <QResizeEvent>
 #include <QGraphicsPixmapItem>
 #include "MatrixTableView.h"
-#include "SolveButton.h"
+#include "PixmapButton.h"
 #include <iostream>
 
 
@@ -21,19 +21,25 @@ MatrixView::MatrixView(QWidget *parent) : QGraphicsView(parent) {
     scene_ = new QGraphicsScene(this);
     setScene(scene_);
 
-    const QPixmap sPixmap(":img/solve");
-    solve_ = new ButtonPixmapItem(sPixmap.scaled(60, 60));
+    const QPixmap solvePixmap(":img/solve.png");
+    solve_ = new ButtonPixmapItem(solvePixmap.scaled(60, 60));
     scene_->addItem(solve_);
 
-    solve_->setZValue(1.0);
 
-    const QPixmap rPixmap(":img/reset");
-    reset_ = new ButtonPixmapItem(rPixmap.scaled(60, 60));
+    const QPixmap resetPixmap(":img/reset.png");
+    reset_ = new ButtonPixmapItem(resetPixmap.scaled(60, 60));
     scene_->addItem(reset_);
 
-    QPixmap backgroundImage(":img/flor");
+    const QPixmap returnPixmap(":img/home.png");
+    return_ = new ButtonPixmapItem(returnPixmap.scaled(60, 60));
+    scene_->addItem(return_);
+
+    QPixmap backgroundImage(":img/flor.png");
     scene_->setBackgroundBrush(QBrush(backgroundImage));
+
+    solve_->setZValue(2.0);
     reset_->setZValue(2.0);
+    return_->setZValue(2.0);
 }
 
 void MatrixView::setMatrix(const std::vector<std::vector<char>> &matrix) {
@@ -83,6 +89,7 @@ void MatrixView::updateScene() {
 
     solve_->setPos(0, 0);
     reset_->setPos(viewport()->width() - 60, 0);
+    return_->setPos(viewport()->width() - 60, viewport()->height() - 60);
 
 }
 
@@ -120,4 +127,8 @@ ButtonPixmapItem *MatrixView::getSolveButton() {
 
 ButtonPixmapItem *MatrixView::getResetButton() {
     return reset_;
+}
+
+ButtonPixmapItem *MatrixView::getReturnButton() {
+    return return_;
 }
