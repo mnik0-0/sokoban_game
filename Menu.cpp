@@ -11,7 +11,7 @@ MenuWidget::MenuWidget(QWidget *parent) : QGraphicsView(parent) {
     setScene(scene_);
 
 
-    QPixmap backgroundImage(":img/flor");
+    QPixmap backgroundImage(":img/menu.jpg");
     scene_->setBackgroundBrush(QBrush(backgroundImage));
 
     play_ = new ButtonPixmapItem(QPixmap(":img/play.png"));

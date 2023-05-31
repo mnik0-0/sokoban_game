@@ -23,6 +23,8 @@
         <file>img/exit.png</file>
         <file>img/play.png</file>
         <file>img/sound.png</file>
+        <file>img/win.png</file>
+        <file>img/menu.jpg</file>
 
     </qresource>
 </RCC>

@@ -13,12 +13,9 @@ Level::Level(QWidget *parent) : QWidget(parent) {
     controller_ = new Controller();
 
     resize(500, 700);
-//    QWidget *centralWidget = new QWidget(this);
     QGridLayout *layout = new QGridLayout(this);
-//    setCentralWidget(centralWidget);
 
     view_ = new MatrixView(this);
-//
     view_->setMatrix(controller_->get_current_matrix());
 
     ButtonPixmapItem *solveButtonItem = view_->getSolveButton();
@@ -30,12 +27,11 @@ Level::Level(QWidget *parent) : QWidget(parent) {
     connect(resetButtonItem, &ButtonPixmapItem::clicked, this, &Level::resetLevel);
     connect(returnButtonItem, &ButtonPixmapItem::clicked, this, &Level::goToMenuSlot);
 
-    showFullScreen();
 }
 
 void Level::keyPressEvent(QKeyEvent *event) {
 
-    if (solving_ || solved_) {
+    if (solving_) {
         return;
     }
 
@@ -62,17 +58,11 @@ void Level::keyPressEvent(QKeyEvent *event) {
     }
     view_->setMatrix(controller_->get_current_matrix());
 
-    solved_ = controller_->isSolved();
-
-    if (solved_) {
-        emit 
-    }
-
     QWidget::keyPressEvent(event);
 }
 
 void Level::showSolution() {
-    if (solving_ || solved_) {
+    if (solving_) {
         return;
     }
     solving_ = true;
@@ -98,7 +88,7 @@ void Level::showSolution() {
 }
 
 void Level::resetLevel() {
-    if (solving_ || solved_) {
+    if (solving_) {
         return;
     }
     delete controller_;

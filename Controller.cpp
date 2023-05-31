@@ -14,7 +14,6 @@ Controller::Controller() {
 
 void Controller::get_start_puzzle() {
     std::vector<std::vector<char>> tmp = model_.level_from_file();
-
     puzzle_ = converterToPuzzle(tmp);
 }
 
@@ -37,12 +36,6 @@ void Controller::get_next_puzzle(char direction) {
     State * state = mv->get_state(State(puzzle_.player, puzzle_.boxes));
     if (state == nullptr) {
         return;
-    }
-
-    if (state->success(puzzle_.goals)) {
-        solved_ = true;
-    } else {
-        solved_ = false;
     }
 
     puzzle_.boxes = state->boxes;
@@ -149,6 +142,3 @@ void Controller::setPuzzle(const std::vector<std::vector<char>> &level) {
     puzzle_ = converterToPuzzle(level);
 }
 
-bool Controller::isSolved() {
-    return solved_;
-}

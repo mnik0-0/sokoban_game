@@ -39,6 +39,5 @@ private:
     ButtonPixmapItem *reset_;
     ButtonPixmapItem *return_;
     QList<QGraphicsItem *> map_;
-
 };
 
