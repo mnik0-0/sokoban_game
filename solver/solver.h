@@ -353,6 +353,8 @@ public:
                     break;
                 case Path::final:
                     return res;
+                case Path::none:
+                    return "";
             }
             hash = get_hash(st);
         }

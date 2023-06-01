@@ -19,7 +19,7 @@ std::vector<std::vector<char>> Model::levelFromFile(int idLevel) {
 //    file.open(QIODevice::ReadOnly|QIODevice::Text);
 
 
-    QFile file(":levels/levels.json");
+    QFile file("C:\\Users\\Nikita\\Desktop\\sokoban\\sokoban_game\\levels\\levels.json");
     if (!file.open(QIODevice::ReadOnly)) {
         qWarning() << "Не удалось открыть файл JSON для чтения";
     }
@@ -45,7 +45,10 @@ std::vector<std::vector<char>> Model::levelFromFile(int idLevel) {
         id = QString::number(idLevel);
     }
 
-    QJsonArray level = jsonObject["levels"][id]["level"].toArray();
+    QJsonObject levelsObject = jsonObject["levels"].toObject();
+    levelsObject = levelsObject[id].toObject();
+
+    QJsonArray level = levelsObject["level"].toArray();
 
     std::vector<std::vector<char>> res;
     std::string line;
@@ -66,7 +69,7 @@ std::vector<std::vector<char>> Model::levelFromFile(int idLevel) {
 }
 
 int Model::getMaxId() {
-    QFile file(":levels/levels.json");
+    QFile file("C:\\Users\\Nikita\\Desktop\\sokoban\\sokoban_game\\levels\\levels.json");
     if (!file.open(QIODevice::ReadOnly)) {
         qWarning() << "Не удалось открыть файл JSON для чтения";
     }
@@ -98,7 +101,7 @@ void Model::saveLevel(const std::vector<std::vector<char>> &vector) {
         list.push_back(QString::fromStdString(tmp));
     }
 
-    QFile file(":levels/levels.json");
+    QFile file("C:\\Users\\Nikita\\Desktop\\sokoban\\sokoban_game\\levels\\levels.json");
     if (!file.open(QIODevice::ReadOnly)) {
         qDebug() << "ERROR READING";
         return;
@@ -132,7 +135,7 @@ void Model::saveLevel(const std::vector<std::vector<char>> &vector) {
 
     jsonDocument = QJsonDocument(jsonObject);
 
-    QFile file2("C:\\Users\\admin\\Desktop\\sokoban\\sokoban_game\\levels\\levels.json");
+    QFile file2("C:\\Users\\Nikita\\Desktop\\sokoban\\sokoban_game\\levels\\levels.json");
     if (!file2.open(QIODevice::WriteOnly)) {
         qDebug() << "ERROR WRITING" << file2.errorString();
         return;
