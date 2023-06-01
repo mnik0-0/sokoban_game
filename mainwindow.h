@@ -30,6 +30,7 @@ private slots:
     void showLevelById(int i);
     void showMenu();
     void showLevelSelector();
+    void showLevelCreator();
 
 private:
     MenuWidget* menuWidget_;

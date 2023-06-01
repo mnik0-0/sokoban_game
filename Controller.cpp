@@ -156,3 +156,53 @@ int Controller::getMaxId() {
 std::vector<std::vector<char>> Controller::getPuzzleById(int id) {
     return model_.levelFromFile(id);
 }
+
+QString Controller::checkValid(const std::vector<std::vector<char>>& matrix) {
+    int player_count = 0;
+    int box_count = 0;
+    int goal_count = 0;
+    for (int i = 0; i < matrix.size(); ++i) {
+        for (int j = 0; j < matrix[0].size(); ++j) {
+            if (matrix[i][j] == '@') {
+                player_count++;
+            }
+            if (matrix[i][j] == '$') {
+                box_count++;
+            }
+            if (matrix[i][j] == '.') {
+                goal_count++;
+            }
+            if (matrix[i][j] == '*') {
+                goal_count++;
+                box_count++;
+            }
+            if (matrix[i][j] == '+') {
+                goal_count++;
+                player_count++;
+            }
+        }
+    }
+
+    if (player_count < 1) {
+        return "no player";
+    }
+    if (player_count > 1) {
+        return "to many players";
+    }
+    if (box_count < 1) {
+        return "no boxes";
+    }
+    if (goal_count < 1) {
+        return "no goals";
+    }
+    if (box_count != goal_count) {
+        return "boxes != goals";
+    }
+
+    return "good";
+}
+
+void Controller::saveLevel(const std::vector<std::vector<char>>& vector) {
+    model_.saveLevel(vector);
+}
+

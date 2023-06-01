@@ -115,7 +115,7 @@ public:
                 if (checkWall(i, j) || !goals_matrix[i][j]) {
                     continue;
                 }
-                if (!goals_matrix[i + 1][j] && goals_matrix[i][j]) {
+                if (!checkWall(i + 1, j) && !goals_matrix[i + 1][j] && goals_matrix[i][j]) {
                     vertex.player = {i + 1, j};
                     long long hash = get_hash(vertex);
                     next_ll[hash] = Path::final;
@@ -126,7 +126,7 @@ public:
                     }
 
                 }
-                if (!goals_matrix[i - 1][j] && goals_matrix[i][j]) {
+                if (!checkWall(i - 1, j) && !goals_matrix[i - 1][j] && goals_matrix[i][j]) {
                     vertex.player = {i - 1, j};
                     long long hash = get_hash(vertex);
                     next_ll[hash] = Path::final;
@@ -137,7 +137,7 @@ public:
                     }
 
                 }
-                if (!goals_matrix[i][j + 1] && goals_matrix[i][j]) {
+                if (!checkWall(i, j + 1) && !goals_matrix[i][j + 1] && goals_matrix[i][j]) {
                     vertex.player = {i, j + 1};
                     long long hash = get_hash(vertex);
                     next_ll[hash] = Path::final;
@@ -149,7 +149,7 @@ public:
 
                 }
 
-                if (!goals_matrix[i][j - 1] && goals_matrix[i][j]) {
+                if (!checkWall(i, j - 1) && !goals_matrix[i][j - 1] && goals_matrix[i][j]) {
                     vertex.player = {i, j - 1};
                     long long hash = get_hash(vertex);
                     next_ll[hash] = Path::final;
@@ -201,6 +201,23 @@ public:
                     st.boxesMatrix[pos2.row][pos2.col] = 0;
                     st.boxesMatrix[vertex.player.row][vertex.player.col] = 1;
 
+//                    int tmp = 0;
+//                    if (checkWall(vertex.player.row - 1, vertex.player.col)) {
+//                        tmp++;
+//                    }
+//                    if (checkWall(vertex.player.row + 1, vertex.player.col)) {
+//                        tmp++;
+//                    }
+//                    if (checkWall(vertex.player.row, vertex.player.col + 1)) {
+//                        tmp++;
+//                    }
+//                    if (checkWall(vertex.player.row, vertex.player.col - 1)) {
+//                        tmp++;
+//                    }
+//                    if (tmp >= 2) {
+//                        continue;
+//                    }
+
                     long long n_hash_box = get_next_hash(vertex, old_hash, st.player.col, st.player.row, pos2.row, pos2.col, vertex.player.row, vertex.player.col);
                     if (next_ll[n_hash_box] == Path::none) {
 
@@ -245,6 +262,24 @@ public:
                     }
                     st.boxesMatrix[pos2.row][pos2.col] = 0;
                     st.boxesMatrix[vertex.player.row][vertex.player.col] = 1;
+
+//                    int tmp = 0;
+//                    if (checkWall(vertex.player.row - 1, vertex.player.col)) {
+//                        tmp++;
+//                    }
+//                    if (checkWall(vertex.player.row + 1, vertex.player.col)) {
+//                        tmp++;
+//                    }
+//                    if (checkWall(vertex.player.row, vertex.player.col + 1)) {
+//                        tmp++;
+//                    }
+//                    if (checkWall(vertex.player.row, vertex.player.col - 1)) {
+//                        tmp++;
+//                    }
+//                    if (tmp >= 2) {
+//                        continue;
+//                    }
+
                     long long n_hash_box = get_next_hash(vertex, old_hash, st.player.col, st.player.row, pos2.row, pos2.col, vertex.player.row, vertex.player.col);
                     if (next_ll[n_hash_box] == Path::none) {
 

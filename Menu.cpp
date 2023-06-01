@@ -18,18 +18,19 @@ MenuWidget::MenuWidget(QWidget *parent) : QGraphicsView(parent) {
 
     levels_ = new ButtonPixmapItem(QPixmap(":img/levels.png"));
 
-    exit_ = new ButtonPixmapItem(QPixmap(":img/exit.png"));
+    create_ = new ButtonPixmapItem(QPixmap(":img/create.png"));
 
 
     scene_->addItem(play_);
 
     scene_->addItem(levels_);
 
-    scene_->addItem(exit_);
+    scene_->addItem(create_);
     updateScene();
 
     connect(play_, &ButtonPixmapItem::clicked, this, &MenuWidget::onPlayClicked);
     connect(levels_, &ButtonPixmapItem::clicked, this, &MenuWidget::onSelectorClicked);
+    connect(create_, &ButtonPixmapItem::clicked, this, &MenuWidget::onCreatorClicked);
 }
 
 void MenuWidget::resizeEvent(QResizeEvent *event) {
@@ -58,12 +59,12 @@ void MenuWidget::updateScene() {
 
     levels_->setPos(buttonX, buttonY + buttonHeight + spacing);
 
-    exit_->setPos(buttonX, buttonY + (buttonHeight + spacing) * 2);
+    create_->setPos(buttonX, buttonY + (buttonHeight + spacing) * 2);
 
 
     play_->setPixmap(QPixmap(":img/play.png").scaled(buttonWidth, buttonHeight));
     levels_->setPixmap(QPixmap(":img/levels.png").scaled(buttonWidth, buttonHeight));
-    exit_->setPixmap(QPixmap(":img/exit.png").scaled(buttonWidth, buttonHeight));
+    create_->setPixmap(QPixmap(":img/create.png").scaled(buttonWidth, buttonHeight));
 }
 
 void MenuWidget::onPlayClicked() {
@@ -72,4 +73,8 @@ void MenuWidget::onPlayClicked() {
 
 void MenuWidget::onSelectorClicked() {
     emit goToLevelSelector();
+}
+
+void MenuWidget::onCreatorClicked() {
+    emit goToLevelCreator();
 }

@@ -19,14 +19,14 @@ if (NOT CMAKE_PREFIX_PATH)
 endif ()
 
 set(QT_VERSION 6)
-set(REQUIRED_LIBS Core Widgets)
-set(REQUIRED_LIBS_QUALIFIED Qt6::Core Qt6::Widgets)
+set(REQUIRED_LIBS Core Widgets Concurrent)
+set(REQUIRED_LIBS_QUALIFIED Qt6::Core Qt6::Widgets Qt6::Concurrent)
 find_package(Qt${QT_VERSION} COMPONENTS ${REQUIRED_LIBS} REQUIRED)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "-Wall -O3")
 
-set(SOURCES solver/state.cpp solver/state.h solver/move.cpp solver/move.h solver/solver.cpp solver/solver.h main.cpp mainwindow.cpp mainwindow.h Controller.cpp Controller.h MatrixTableView.cpp MatrixTableView.h Model.cpp Model.h solver/position.cpp solver/position.h solver/puzzle.cpp solver/puzzle.h resources.qrc solver/state_solver.cpp solver/state_solver.h PixmapButton.cpp PixmapButton.h Menu.cpp Menu.h Level.cpp Level.h CreateLevel.cpp CreateLevel.h LevelSelector.cpp LevelSelector.h)
+set(SOURCES solver/state.cpp solver/state.h solver/move.cpp solver/move.h solver/solver.cpp solver/solver.h main.cpp mainwindow.cpp mainwindow.h Controller.cpp Controller.h MatrixTableView.cpp MatrixTableView.h Model.cpp Model.h solver/position.cpp solver/position.h solver/puzzle.cpp solver/puzzle.h resources.qrc solver/state_solver.cpp solver/state_solver.h PixmapButton.cpp PixmapButton.h Menu.cpp Menu.h Level.cpp Level.h CreateLevel.cpp CreateLevel.h LevelSelector.cpp LevelSelector.h MatrixTableCreationView.cpp MatrixTableCreationView.h PixmapCreationButton.cpp PixmapCreationButton.h)
 
 qt6_add_big_resources(RESOURCES)
 add_executable(${PROJECT_NAME} ${SOURCES} ${RESOURCES})

@@ -9,6 +9,7 @@
 #include <QGridLayout>
 #include <QTimer>
 #include <QRandomGenerator>
+#include <QtConcurrent>
 
 Level::Level(QWidget *parent, int id) : QWidget(parent) {
     controller_ = new Controller();

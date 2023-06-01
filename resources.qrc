@@ -24,6 +24,8 @@
         <file>img/win.png</file>
         <file>img/menu.jpg</file>
         <file>img/levels.png</file>
+        <file>img/create.png</file>
+        <file>img/empty.png</file>
 
     </qresource>
 </RCC>

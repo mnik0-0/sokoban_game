@@ -28,6 +28,8 @@ public:
 
     std::string getSolution();
 
+    QString checkValid(const std::vector<std::vector<char>>& matrix);
+
     void setPuzzle(const std::vector<std::vector<char>> &level);
 
     int getMaxId();
@@ -39,5 +41,7 @@ public:
 public:
     Puzzle puzzle_;
     Model model_;
+
+    void saveLevel(const std::vector<std::vector<char>>& vector);
 };
 

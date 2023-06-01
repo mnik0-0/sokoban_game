@@ -9,22 +9,28 @@
 #include "MatrixTableView.h"
 
 #include <QObject>
-class LevelSelector: public QWidget {
+
+class LevelSelector : public QWidget {
 Q_OBJECT
+
 public:
     explicit LevelSelector(QWidget *parent = nullptr);
 
 protected:
 
 signals:
+
     void goToMenu();
+
     void goToLevel(int id);
 
 private slots:
+
     void goToLevelSlot(int id);
 
 private:
-    Controller* controller_;
+    Controller *controller_;
+    ButtonPixmapItem *return_;
 };
 
 #endif //GAME_SOKOBAN_LEVELSELECTOR_H

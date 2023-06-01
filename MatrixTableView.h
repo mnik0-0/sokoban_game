@@ -16,7 +16,7 @@ class MatrixView : public QGraphicsView {
 Q_OBJECT
 
 public:
-    MatrixView(QWidget *parent = nullptr, bool resized = true, bool buttons = true, bool clickable = false, int id = -1);
+    explicit MatrixView(QWidget *parent = nullptr, bool resized = true, bool buttons = true, bool clickable = false, int id = -1);
 
     void setMatrix(const std::vector<std::vector<char>> &matrix);
 

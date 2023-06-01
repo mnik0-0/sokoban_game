@@ -10,5 +10,7 @@ class Model {
 public:
     std::vector<std::vector<char>> levelFromFile(int idLevel = -1);
     int getMaxId();
+
+    void saveLevel(const std::vector<std::vector<char>> &vector);
 };
 

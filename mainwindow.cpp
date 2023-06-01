@@ -18,6 +18,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     setCentralWidget(menuWidget_);
     connect(menuWidget_, &MenuWidget::goToLevel, this, &MainWindow::showLevel);
     connect(menuWidget_, &MenuWidget::goToLevelSelector, this, &MainWindow::showLevelSelector);
+    connect(menuWidget_, &MenuWidget::goToLevelCreator, this, &MainWindow::showLevelCreator);
 }
 
 MainWindow::~MainWindow() {}
@@ -40,11 +41,17 @@ void MainWindow::showMenu() {
     setCentralWidget(menuWidget_);
     connect(menuWidget_, &MenuWidget::goToLevel, this, &MainWindow::showLevel);
     connect(menuWidget_, &MenuWidget::goToLevelSelector, this, &MainWindow::showLevelSelector);
+    connect(menuWidget_, &MenuWidget::goToLevelCreator, this, &MainWindow::showLevelCreator);
 }
 
 void MainWindow::showLevelById(int i) {
-    qDebug() << i;
     level_ = new Level(this, i);
     setCentralWidget(level_);
     connect(level_, &Level::goToMenu, this, &MainWindow::showMenu);
+}
+
+void MainWindow::showLevelCreator() {
+    createLevel_ = new CreateLevel(this);
+    setCentralWidget(createLevel_);
+    connect(createLevel_, &CreateLevel::goToMenu, this, &MainWindow::showMenu);
 }

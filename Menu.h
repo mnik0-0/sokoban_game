@@ -24,17 +24,19 @@ protected:
 signals:
     void goToLevel();
     void goToLevelSelector();
+    void goToLevelCreator();
 
 private slots:
     void onPlayClicked();
     void onSelectorClicked();
+    void onCreatorClicked();
 
 private:
     ButtonPixmapItem *play_;
 
     ButtonPixmapItem *levels_;
 
-    ButtonPixmapItem *exit_;
+    ButtonPixmapItem *create_;
 
     QGraphicsScene *scene_;
 
